@@ -1,39 +1,55 @@
 <!DOCTYPE html>
 <html lang="en"> <!-- Removed 'scroll-smooth' to allow Lenis to take over -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fish Burger Essaouira - Fresh & Spicy</title>
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Lenis Smooth Scroll -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    
+
     <!-- Fonts: Playfair Display (Headings) & DM Sans (Body) -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
 
     <style>
-        body { font-family: 'DM Sans', sans-serif; }
-        h1, h2, h3, h4, .serif { font-family: 'Playfair Display', serif; }
-        
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
         /* Lenis Recommended CSS */
         html.lenis {
             height: auto;
         }
+
         .lenis.lenis-smooth {
             scroll-behavior: auto;
         }
+
         .lenis.lenis-smooth [data-lenis-prevent] {
             overscroll-behavior: contain;
         }
+
         .lenis.lenis-stopped {
             overflow: hidden;
         }
+
         .lenis.lenis-scrolling iframe {
             pointer-events: none;
         }
@@ -44,37 +60,61 @@
             transform: translateY(20px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
+
         .fade-enter-active {
             opacity: 1;
             transform: translateY(0);
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #dc2626; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
 
         /* Loader */
         .loader {
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top: 3px solid #fff;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
         }
+
         .loader-dark {
-            border: 3px solid rgba(0,0,0,0.1);
+            border: 3px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
             border-top: 3px solid #dc2626;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-red-100 selection:text-red-900">
 
     <!-- Navbar -->
@@ -82,7 +122,8 @@
         <div class="container mx-auto px-6 flex justify-between items-center">
             <!-- Brand -->
             <a href="#" class="flex items-center gap-3 group">
-                <div class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg group-hover:bg-white group-hover:text-red-600 transition-colors">
+                <div
+                    class="bg-red-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-lg group-hover:bg-white group-hover:text-red-600 transition-colors">
                     <i class="fa-solid fa-fish"></i>
                 </div>
                 <div class="leading-tight">
@@ -100,7 +141,8 @@
                 <!-- Removed Planner link -->
                 <a href="#order" class="hover:text-red-400 transition-colors">Order</a>
                 <a href="#reviews" class="hover:text-red-400 transition-colors">Reviews</a>
-                <a href="#visit" class="bg-white text-blue-950 px-6 py-2 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all">
+                <a href="#visit"
+                    class="bg-white text-blue-950 px-6 py-2 rounded-full font-bold hover:bg-red-600 hover:text-white transition-all">
                     Visit Us
                 </a>
             </div>
@@ -112,7 +154,8 @@
         </div>
 
         <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-blue-950 text-white shadow-xl py-8 px-6 flex flex-col gap-6 text-center border-t border-blue-900 h-screen">
+        <div id="mobile-menu"
+            class="hidden absolute top-full left-0 w-full bg-blue-950 text-white shadow-xl py-8 px-6 flex flex-col gap-6 text-center border-t border-blue-900 h-screen">
             <a href="#about" class="mobile-link text-lg hover:text-red-400">The Story</a>
             <a href="#gallery" class="mobile-link text-lg hover:text-red-400">Gallery</a>
             <a href="#menu" class="mobile-link text-lg hover:text-red-400">Menu</a>
@@ -127,14 +170,13 @@
     <header class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-blue-950">
         <!-- Background -->
         <div class="absolute inset-0 z-0">
-            <img 
-                src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2665&auto=format&fit=crop" 
-                alt="Fish Burger Background" 
-                class="w-full h-full object-cover object-center"
-                onerror="this.style.display='none'" 
-            >
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=2665&auto=format&fit=crop"
+                alt="Fish Burger Background" class="w-full h-full object-cover object-center"
+                onerror="this.style.display='none'">
             <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/60 to-transparent pointer-events-none"></div>
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-blue-900/60 to-transparent pointer-events-none">
+            </div>
         </div>
 
         <!-- Content -->
@@ -145,30 +187,39 @@
                     <span class="text-red-400 font-bold tracking-widest uppercase text-sm">Est. Essaouira</span>
                 </div>
                 <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-none mb-8">
-                    Ocean to <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Table.</span>
+                    Ocean to <br /> <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">Table.</span>
                 </h1>
                 <p class="text-blue-100 text-lg md:text-xl leading-relaxed mb-10 max-w-lg">
-                    Experience the authentic taste of Essaouira's port. Freshly caught seafood, homemade spicy sharmoula, and soft artisan buns.
+                    Experience the authentic taste of Essaouira's port. Freshly caught seafood, homemade spicy
+                    sharmoula, and soft artisan buns.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#menu" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-red-600/30 flex items-center justify-center gap-3">
+                    <a href="#menu"
+                        class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-red-600/30 flex items-center justify-center gap-3">
                         Order Now <i class="fa-solid fa-arrow-right"></i>
                     </a>
-                    <a href="#ai-chef" class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3">
+                    <a href="#ai-chef"
+                        class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center gap-3">
                         <i class="fa-solid fa-wand-magic-sparkles text-yellow-400"></i> Ask AI Chef
                     </a>
                 </div>
             </div>
-            
+
             <!-- Floating Reviews Badge (Hidden on Mobile) -->
             <div class="hidden md:block justify-self-end">
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl max-w-xs animate-[bounce_3s_infinite]">
+                <div
+                    class="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl max-w-xs animate-[bounce_3s_infinite]">
                     <div class="flex items-center gap-1 text-yellow-400 mb-2">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-white font-serif italic text-lg mb-3">"Best fish burger in town. The Msemmen tacos are legendary."</p>
+                    <p class="text-white font-serif italic text-lg mb-3">"Best fish burger in town. The Msemmen tacos
+                        are legendary."</p>
                     <div class="flex items-center gap-3">
-                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&auto=format&fit=crop" class="w-10 h-10 rounded-full border-2 border-red-500" alt="Karim">
+                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&auto=format&fit=crop"
+                            class="w-10 h-10 rounded-full border-2 border-red-500" alt="Karim">
                         <div class="text-sm">
                             <span class="block text-white font-bold">Karim E.</span>
                             <span class="block text-blue-200 text-xs">Local Guide</span>
@@ -182,28 +233,24 @@
     <!-- Story Section (2 Images) -->
     <section id="about" class="py-24 bg-white relative overflow-hidden">
         <!-- Decor Text -->
-        <span class="absolute top-20 right-0 text-9xl font-bold text-slate-50 select-none -z-10 font-serif opacity-50">STORY</span>
+        <span
+            class="absolute top-20 right-0 text-9xl font-bold text-slate-50 select-none -z-10 font-serif opacity-50">STORY</span>
 
         <div class="container mx-auto px-6">
             <div class="flex flex-col lg:flex-row items-center gap-16">
                 <!-- Image Grid -->
                 <div class="lg:w-1/2 relative">
                     <div class="grid grid-cols-2 gap-4">
-                    <!-- Image 1 -->
-                    <img
-                        src="img/image2story.jpg"
-                        alt="Story Image 2"
-                        class="rounded-3xl shadow-2xl w-full h-80 object-cover"
-                    >
+                        <!-- Image 1 -->
+                        <img src="img/image2story.jpg" alt="Story Image 2"
+                            class="rounded-3xl shadow-2xl w-full h-80 object-cover">
                         <!-- Image 2 -->
-                        <img
-                            src="img/image1story.jpg"
-                            alt="Story Image 1"
-                            class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12"
-                        >
+                        <img src="img/image1story.jpg" alt="Story Image 1"
+                            class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12">
                     </div>
                     <!-- Central Badge -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-950 text-white p-6 rounded-full w-32 h-32 flex flex-col items-center justify-center shadow-xl border-4 border-white">
+                    <div
+                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-950 text-white p-6 rounded-full w-32 h-32 flex flex-col items-center justify-center shadow-xl border-4 border-white">
                         <span class="font-bold text-3xl">100%</span>
                         <span class="text-xs uppercase tracking-widest text-red-400">Local</span>
                     </div>
@@ -212,15 +259,17 @@
                 <!-- Text -->
                 <div class="lg:w-1/2">
                     <h2 class="text-4xl lg:text-5xl font-bold text-blue-950 mb-6">
-                        Born in the Medina. <br/> Served with Soul.
+                        Born in the Medina. <br /> Served with Soul.
                     </h2>
                     <p class="text-slate-600 text-lg mb-6 leading-relaxed">
-                        FishBurger wasn't started in a boardroom; it started on the windy docks of Essaouira. We wake up with the sun to greet the fishing boats returning to port, hand-selecting the freshest catch.
+                        FishBurger wasn't started in a boardroom; it started on the windy docks of Essaouira. We wake up
+                        with the sun to greet the fishing boats returning to port, hand-selecting the freshest catch.
                     </p>
                     <p class="text-slate-600 text-lg mb-8 leading-relaxed">
-                        We swap beef for calamari, ketchup for spicy homemade sharmoula, and ordinary buns for flaky Msemmen. It's not just a burger; it's the taste of the Atlantic.
+                        We swap beef for calamari, ketchup for spicy homemade sharmoula, and ordinary buns for flaky
+                        Msemmen. It's not just a burger; it's the taste of the Atlantic.
                     </p>
-                    
+
                     <div class="flex gap-8 border-t border-slate-100 pt-8">
                         <div>
                             <span class="block text-3xl font-bold text-red-600 mb-1">Daily</span>
@@ -246,46 +295,66 @@
 
             <!-- New Mosaic Grid Layout -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[300px]">
-                
+
                 <!-- Item 1: Wide Feature (Top Left) -->
                 <div class="md:col-span-2 relative group overflow-hidden rounded-2xl">
-                    <video src="./video/fishburger.mp4" autoplay loop muted playsinline alt="Restaurant Interior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></video>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
-                        <span class="text-white font-bold text-2xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Cozy Vibes</span>
+                    <video src="./video/fishburger.mp4" autoplay loop muted playsinline alt="Restaurant Interior"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></video>
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
+                        <span
+                            class="text-white font-bold text-2xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Cozy
+                            Vibes</span>
                     </div>
                 </div>
 
                 <!-- Item 2: Tall Feature (Right Side) -->
                 <div class="md:row-span-2 relative group overflow-hidden rounded-2xl">
-                    <img src="./img/fishburgerimg1.jpg" alt="Chef Cooking" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
-                        <span class="text-white font-bold text-2xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Open Kitchen</span>
+                    <img src="./img/fishburgerimg1.jpg" alt="Chef Cooking"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
+                        <span
+                            class="text-white font-bold text-2xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Open
+                            Kitchen</span>
                     </div>
                 </div>
 
                 <!-- Item 3: Standard (Middle Left) -->
                 <div class="relative group overflow-hidden rounded-2xl">
-                    <img src="img/fishburgersardine.jpg" alt="Sardine Burger" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <i class="fa-solid fa-heart text-white text-3xl scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></i>
+                    <img src="img/fishburgersardine.jpg" alt="Sardine Burger"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i
+                            class="fa-solid fa-heart text-white text-3xl scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></i>
                     </div>
                 </div>
 
                 <!-- Item 4: Standard (Middle Center) -->
                 <div class="relative group overflow-hidden rounded-2xl">
-                    <img src="img/fishburgercrispy.jpg" alt="Crispy Fish Burger" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <i class="fa-solid fa-fire text-white text-3xl scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></i>
+                    <img src="img/fishburgercrispy.jpg" alt="Crispy Fish Burger"
+                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div
+                        class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <i
+                            class="fa-solid fa-fire text-white text-3xl scale-0 group-hover:scale-100 transition-transform duration-300 delay-100"></i>
                     </div>
                 </div>
 
                 <!-- Item 5: Full Width Panorama (Bottom) -->
                 <div class="md:col-span-3 relative group overflow-hidden rounded-2xl">
-                    <img src="img/fishgurberbutton.jpg" alt="Fish Burger Button" class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
+                    <img src="img/fishgurberbutton.jpg" alt="Fish Burger Button"
+                        class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-8">
                         <div>
-                            <span class="text-white font-bold text-2xl block mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Good Times & Great Food</span>
-                            <span class="text-blue-200 text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Tag us @fishburger.essaouira to be featured</span>
+                            <span
+                                class="text-white font-bold text-2xl block mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Good
+                                Times & Great Food</span>
+                            <span
+                                class="text-blue-200 text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Tag
+                                us @fishburger.essaouira to be featured</span>
                         </div>
                     </div>
                 </div>
@@ -294,11 +363,13 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col md:flex-row justify-center gap-4 mt-12 items-center">
-                <a href="https://www.instagram.com/fishburger.essaouira" target="_blank" class="inline-flex items-center gap-3 bg-white text-slate-800 px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:text-red-600 transition-all border border-slate-200 group">
-                    <i class="fa-brands fa-instagram text-2xl text-red-600 group-hover:scale-110 transition-transform"></i>
+                <a href="https://www.instagram.com/fishburger.essaouira" target="_blank"
+                    class="inline-flex items-center gap-3 bg-white text-slate-800 px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl hover:text-red-600 transition-all border border-slate-200 group">
+                    <i
+                        class="fa-brands fa-instagram text-2xl text-red-600 group-hover:scale-110 transition-transform"></i>
                     Follow us on Instagram
                 </a>
-                
+
 
             </div>
         </div>
@@ -307,16 +378,21 @@
     <!-- AI Chef Section (Interactive) -->
     <section id="ai-chef" class="py-20 bg-blue-950 relative overflow-hidden">
         <!-- Background Pattern -->
-        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
-        
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+
         <div class="container mx-auto px-6 relative z-10">
-            <div class="bg-gradient-to-br from-blue-900 to-blue-950 border border-blue-800 rounded-3xl p-8 md:p-16 shadow-2xl flex flex-col lg:flex-row items-center gap-12">
-                
+            <div
+                class="bg-gradient-to-br from-blue-900 to-blue-950 border border-blue-800 rounded-3xl p-8 md:p-16 shadow-2xl flex flex-col lg:flex-row items-center gap-12">
+
                 <div class="lg:w-1/2 text-white">
-                    <div class="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4">New Feature</div>
-                    <h2 class="text-4xl font-bold mb-4">Can't Decide? <br/> Ask our AI Chef.</h2>
+                    <div
+                        class="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                        New Feature</div>
+                    <h2 class="text-4xl font-bold mb-4">Can't Decide? <br /> Ask our AI Chef.</h2>
                     <p class="text-blue-200 text-lg mb-8">
-                        Tell us what you're craving—spicy, crunchy, light, or super hungry—and our Gemini-powered AI will curate the perfect meal from our menu.
+                        Tell us what you're craving—spicy, crunchy, light, or super hungry—and our Gemini-powered AI
+                        will curate the perfect meal from our menu.
                     </p>
                     <div class="flex items-center gap-4 text-sm text-blue-300">
                         <i class="fa-solid fa-fish text-lg"></i> Powered by FishBurger
@@ -325,29 +401,26 @@
 
                 <div class="lg:w-1/2 w-full">
                     <div class="bg-white rounded-2xl p-6 shadow-xl">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Your Craving</label>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Your
+                            Craving</label>
                         <div class="relative">
-                            <input 
-                                type="text" 
-                                id="user-craving" 
-                                placeholder="e.g. I want something spicy and crunchy..." 
+                            <input type="text" id="user-craving"
+                                placeholder="e.g. I want something spicy and crunchy..."
                                 class="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
-                                onkeydown="if(event.key === 'Enter') getChefRecommendation()"
-                            >
-                            <button 
-                                onclick="getChefRecommendation()" 
-                                id="ask-btn"
-                                class="absolute right-2 top-2 bottom-2 bg-red-600 hover:bg-red-700 text-white px-6 rounded-lg font-bold transition-colors flex items-center justify-center min-w-[100px]"
-                            >
+                                onkeydown="if(event.key === 'Enter') getChefRecommendation()">
+                            <button onclick="getChefRecommendation()" id="ask-btn"
+                                class="absolute right-2 top-2 bottom-2 bg-red-600 hover:bg-red-700 text-white px-6 rounded-lg font-bold transition-colors flex items-center justify-center min-w-[100px]">
                                 <span id="btn-text">Ask</span>
                                 <div id="btn-loader" class="loader hidden"></div>
                             </button>
                         </div>
 
                         <!-- Response Box -->
-                        <div id="ai-response" class="hidden mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <div id="ai-response"
+                            class="hidden mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
                             <div class="flex gap-3">
-                                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center shrink-0">
+                                <div
+                                    class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center shrink-0">
                                     <i class="fa-solid fa-robot"></i>
                                 </div>
                                 <div>
@@ -356,10 +429,11 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Error Box -->
-                        <div id="ai-error" class="hidden mt-4 text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
-                             <i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!
+                        <div id="ai-error"
+                            class="hidden mt-4 text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!
                         </div>
                     </div>
                 </div>
@@ -379,10 +453,14 @@
 
             <!-- Categories -->
             <div class="flex flex-wrap justify-center gap-4 mb-12">
-                <button onclick="filterMenu('bestsellers')" class="menu-tab active-tab px-6 py-2 rounded-full border border-blue-950 bg-blue-950 text-white font-medium transition-all">Bestsellers</button>
-                <button onclick="filterMenu('burgers')" class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Burgers</button>
-                <button onclick="filterMenu('tapas')" class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Tapas</button>
-                <button onclick="filterMenu('specialties')" class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Specialties</button>
+                <button onclick="filterMenu('bestsellers')"
+                    class="menu-tab active-tab px-6 py-2 rounded-full border border-blue-950 bg-blue-950 text-white font-medium transition-all">Bestsellers</button>
+                <button onclick="filterMenu('burgers')"
+                    class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Burgers</button>
+                <button onclick="filterMenu('tapas')"
+                    class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Tapas</button>
+                <button onclick="filterMenu('specialties')"
+                    class="menu-tab px-6 py-2 rounded-full border border-slate-300 text-slate-600 hover:border-blue-950 hover:text-blue-950 font-medium transition-all">Specialties</button>
             </div>
 
             <!-- Grid -->
@@ -397,22 +475,26 @@
         <div class="container mx-auto px-6">
             <div class="bg-blue-950 rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row">
                 <!-- Order Context -->
-                <div class="lg:w-1/2 p-10 text-white flex flex-col justify-center relative bg-gradient-to-br from-blue-900 to-blue-950">
+                <div
+                    class="lg:w-1/2 p-10 text-white flex flex-col justify-center relative bg-gradient-to-br from-blue-900 to-blue-950">
                     <h2 class="text-4xl font-bold font-serif mb-6 relative z-10">Order for Pickup <br> or Delivery</h2>
                     <p class="text-blue-200 text-lg mb-8 relative z-10">
-                        Hungry? Select your favorites from the menu above and send your order directly to our kitchen via WhatsApp.
+                        Hungry? Select your favorites from the menu above and send your order directly to our kitchen
+                        via WhatsApp.
                     </p>
-                    
+
                     <div class="space-y-6 relative z-10">
                         <div class="flex items-center gap-4">
-                            <div class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-motorcycle text-xl"></i></div>
+                            <div class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shrink-0"><i
+                                    class="fa-solid fa-motorcycle text-xl"></i></div>
                             <div>
                                 <span class="block font-bold text-lg">Fast Delivery</span>
                                 <span class="text-sm text-blue-300">Within Essaouira Medina & Beach</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shrink-0"><i class="fa-solid fa-bag-shopping text-xl"></i></div>
+                            <div class="bg-red-600 w-12 h-12 rounded-full flex items-center justify-center shrink-0"><i
+                                    class="fa-solid fa-bag-shopping text-xl"></i></div>
                             <div>
                                 <span class="block font-bold text-lg">Store Pickup</span>
                                 <span class="text-sm text-blue-300">Ready in approx. 20 minutes</span>
@@ -425,9 +507,10 @@
                 <div class="lg:w-1/2 bg-slate-50 p-10 text-slate-800">
                     <h3 class="text-2xl font-bold font-serif text-blue-950 mb-6 flex justify-between items-center">
                         Your Order
-                        <span id="cart-count-badge" class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+                        <span id="cart-count-badge"
+                            class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
                     </h3>
-                    
+
                     <!-- Empty State -->
                     <div id="empty-cart-msg" class="text-center py-10 text-slate-500">
                         <div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -448,11 +531,13 @@
                             <span class="text-slate-500 font-medium">Total Estimate</span>
                             <span id="cart-total" class="text-3xl font-bold text-blue-950">0 DH</span>
                         </div>
-                        <button onclick="checkout()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-green-600/30 transition-all flex items-center justify-center gap-3">
-                            <i class="fa-brands fa-whatsapp text-2xl"></i> 
-                            <span>Order via WhatsApp</span>
+                        <button onclick="checkout()"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-green-600/30 transition-all flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-utensils text-2xl"></i>
+                            <span>Place Order</span>
                         </button>
-                        <p class="text-center text-xs text-slate-400 mt-3">Orders are processed manually via WhatsApp chat.</p>
+                        <p class="text-center text-xs text-slate-400 mt-3">Orders are sent directly to our kitchen.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -475,10 +560,12 @@
 
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Review 1 -->
-                <div class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
+                <div
+                    class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded-full object-cover" alt="Magdalena">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop"
+                                class="w-12 h-12 rounded-full object-cover" alt="Magdalena">
                             <div>
                                 <h4 class="font-bold text-blue-950">Magdalena S.</h4>
                                 <div class="text-xs text-slate-400">8 months ago</div>
@@ -487,16 +574,22 @@
                         <i class="fa-brands fa-google text-slate-300 group-hover:text-red-500 transition-colors"></i>
                     </div>
                     <div class="flex text-yellow-400 text-sm mb-4">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-slate-600 leading-relaxed italic">"It was my second time here and the food is amazing. High quality fish, super friendly staff and short waiting time. Strongly recommend!"</p>
+                    <p class="text-slate-600 leading-relaxed italic">"It was my second time here and the food is
+                        amazing. High quality fish, super friendly staff and short waiting time. Strongly recommend!"
+                    </p>
                 </div>
 
                 <!-- Review 2 -->
-                <div class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
+                <div
+                    class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded-full object-cover" alt="Chayma">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop"
+                                class="w-12 h-12 rounded-full object-cover" alt="Chayma">
                             <div>
                                 <h4 class="font-bold text-blue-950">Chayma A.</h4>
                                 <div class="text-xs text-slate-400">1 month ago</div>
@@ -505,16 +598,21 @@
                         <i class="fa-brands fa-google text-slate-300 group-hover:text-red-500 transition-colors"></i>
                     </div>
                     <div class="flex text-yellow-400 text-sm mb-4">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-slate-600 leading-relaxed italic">"Délicieux et propre. Best atmosphere in Essaouira for a quick lunch. The spicy sauce is addictive."</p>
+                    <p class="text-slate-600 leading-relaxed italic">"Délicieux et propre. Best atmosphere in Essaouira
+                        for a quick lunch. The spicy sauce is addictive."</p>
                 </div>
 
                 <!-- Review 3 -->
-                <div class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
+                <div
+                    class="bg-slate-50 p-8 rounded-3xl hover:bg-white hover:shadow-xl transition-all border border-slate-100 group">
                     <div class="flex items-center justify-between mb-6">
                         <div class="flex items-center gap-3">
-                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded-full object-cover" alt="Karim">
+                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=150&auto=format&fit=crop"
+                                class="w-12 h-12 rounded-full object-cover" alt="Karim">
                             <div>
                                 <h4 class="font-bold text-blue-950">Karim E.</h4>
                                 <div class="text-xs text-slate-400">Local Guide</div>
@@ -523,9 +621,13 @@
                         <i class="fa-brands fa-google text-slate-300 group-hover:text-red-500 transition-colors"></i>
                     </div>
                     <div class="flex text-yellow-400 text-sm mb-4">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-slate-600 leading-relaxed italic">"A huge fish feast near the harbor. The <span class="font-bold text-blue-950">Msemmen tacos</span> are a revelation. A must-visit when in Essaouira."</p>
+                    <p class="text-slate-600 leading-relaxed italic">"A huge fish feast near the harbor. The <span
+                            class="font-bold text-blue-950">Msemmen tacos</span> are a revelation. A must-visit when in
+                        Essaouira."</p>
                 </div>
             </div>
         </div>
@@ -545,7 +647,7 @@
                     Fresh seafood, local vibes, and the best spices in Essaouira. Come hungry, leave happy.
                 </p>
             </div>
-            
+
             <div>
                 <h4 class="font-bold text-lg mb-6 font-serif">Find Us</h4>
                 <ul class="space-y-4 text-blue-200">
@@ -566,11 +668,12 @@
                     <li class="flex justify-between"><span>Mon - Sun</span> <span>12:00 - 22:30</span></li>
                 </ul>
                 <div class="mt-6">
-                    <a href="#" class="text-2xl hover:text-red-500 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-red-500 transition-colors"><i
+                            class="fa-brands fa-instagram"></i></a>
                 </div>
             </div>
         </div>
-        
+
         <div class="container mx-auto px-6 border-t border-blue-900 pt-8 text-center text-blue-400 text-sm">
             &copy; <span id="year"></span> Fish Burger Essaouira. All rights reserved.
         </div>
@@ -616,7 +719,7 @@
         const menuGrid = document.getElementById('menu-grid');
         const yearSpan = document.getElementById('year');
         const tabs = document.querySelectorAll('.menu-tab');
-        
+
         // Cart Elements
         const cartItemsContainer = document.getElementById('cart-items');
         const cartFooter = document.getElementById('cart-footer');
@@ -671,10 +774,10 @@
                 const targetId = this.getAttribute('href');
                 if (targetId && targetId !== '#') {
                     const target = document.querySelector(targetId);
-                    if(target) {
+                    if (target) {
                         lenis.scrollTo(target);
                         // Close mobile menu if open
-                        if(!mobileMenu.classList.contains('hidden')) {
+                        if (!mobileMenu.classList.contains('hidden')) {
                             mobileMenu.classList.add('hidden');
                         }
                     }
@@ -686,7 +789,7 @@
         function filterMenu(category) {
             // Tab styling
             tabs.forEach(tab => {
-                if(tab.textContent.toLowerCase() === category || (category === 'specialties' && tab.textContent === 'Specialties')) {
+                if (tab.textContent.toLowerCase() === category || (category === 'specialties' && tab.textContent === 'Specialties')) {
                     tab.classList.remove('bg-transparent', 'text-slate-600', 'border-slate-300');
                     tab.classList.add('bg-blue-950', 'text-white', 'border-blue-950');
                 } else {
@@ -698,8 +801,8 @@
             // Grid Render
             menuGrid.innerHTML = '';
             menuItems[category].forEach((item, index) => {
-                const badge = item.popular 
-                    ? `<span class="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Top Seller</span>` 
+                const badge = item.popular
+                    ? `<span class="absolute top-4 right-4 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Top Seller</span>`
                     : (item.veg ? `<span class="absolute top-4 right-4 bg-green-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Veg</span>` : '');
 
                 const el = document.createElement('div');
@@ -718,7 +821,7 @@
                     </div>
                 `;
                 menuGrid.appendChild(el);
-                
+
                 // Trigger animation
                 setTimeout(() => el.classList.add('fade-enter-active'), index * 100);
             });
@@ -728,14 +831,14 @@
         // UPDATED: Now accepts imgUrl
         function addToCart(name, priceStr, imgUrl) {
             const price = parseInt(priceStr.replace(/[^0-9]/g, ''));
-            
+
             cart.push({ name, price, priceStr, imgUrl });
             updateCartUI();
-            
+
             // Scroll to order section with Lenis
-            if(cart.length === 1) {
+            if (cart.length === 1) {
                 const orderSec = document.getElementById('order');
-                if(orderSec) lenis.scrollTo(orderSec);
+                if (orderSec) lenis.scrollTo(orderSec);
             }
         }
 
@@ -745,7 +848,7 @@
         }
 
         function updateCartUI() {
-            if(cart.length > 0) {
+            if (cart.length > 0) {
                 cartCountBadge.innerText = cart.length;
                 cartCountBadge.classList.remove('hidden');
                 emptyCartMsg.classList.add('hidden');
@@ -760,7 +863,7 @@
 
             cartItemsContainer.innerHTML = '';
             let total = 0;
-            
+
             cart.forEach((item, index) => {
                 total += item.price;
                 const div = document.createElement('div');
@@ -780,22 +883,76 @@
             cartTotalDisplay.innerText = total + " DH";
         }
 
-        function checkout() {
-            if(cart.length === 0) return;
-            
-            let message = "Hello FishBurger! I would like to order:\n\n";
+        // --- DASHBOARD INTEGRATION ---
+        // REPLACE THIS URL with the one you got from Ngrok
+        const DASHBOARD_API_URL = "https://a86a86f67ae6.ngrok-free.app";
+
+        async function sendOrderToDashboard(cartItems, customerDetails) {
+            try {
+                console.log("Sending order to dashboard...");
+
+                const orderData = {
+                    items: cartItems.join(", "), // e.g., "Fish Burger, Fries"
+                    customerName: customerDetails.name,
+                    address: customerDetails.address
+                };
+
+                const response = await fetch(`${DASHBOARD_API_URL}/api/webhook/order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("Order sent to Kitchen Dashboard! ID: " + result.orderId);
+                    cart = [];
+                    updateCartUI();
+                } else {
+                    console.error("Dashboard rejected order:", result.error);
+                    alert("Dashboard rejected order. Please check console.");
+                }
+
+            } catch (error) {
+                console.error("Connection failed. Is the Dashboard running?", error);
+                // Fallback: If dashboard is offline, maybe send an email or WhatsApp
+                alert("Could not connect to Dashboard. Proceeding to WhatsApp...");
+            }
+        }
+
+        async function checkout() {
+            if (cart.length === 0) return;
+
+            // 1. Collect Customer Details
+            const name = prompt("Please enter your Name for the order:");
+            if (!name) return; // User cancelled
+
+            const address = prompt("Please enter your Delivery Address (or 'Pickup'):");
+            if (!address) return; // User cancelled
+
+            // 2. Prepare Cart Items
+            const cartItemNames = cart.map(item => item.name);
+
+            // 3. Send to Dashboard
+            await sendOrderToDashboard(cartItemNames, { name, address });
+
+            // 4. WhatsApp Fallback / Confirmation
+            let message = `Hello FishBurger! I would like to order:\n\nName: ${name}\nAddress: ${address}\n\n`;
             let total = 0;
-            
+
             cart.forEach(item => {
                 message += `- ${item.name} (${item.priceStr})\n`;
                 total += item.price;
             });
-            
+
             message += `\n*Total: ${total} DH*`;
             message += "\n\nPlease confirm my order.";
-            
+
             const encodedMsg = encodeURIComponent(message);
-            window.open(`https://wa.me/212600000000?text=${encodedMsg}`, '_blank');
+            // window.open(`https://wa.me/212600000000?text=${encodedMsg}`, '_blank');
         }
 
         // --- AI CHEF FUNCTION ---
@@ -817,13 +974,13 @@
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
                 });
 
                 if (!response.ok) throw new Error();
                 const data = await response.json();
-                
+
                 responseText.innerText = data.candidates[0].content.parts[0].text;
                 aiResponseDiv.classList.remove('hidden');
             } catch (e) {
@@ -841,12 +998,12 @@
             const loader = document.getElementById('caption-loader');
             const resultBox = document.getElementById('caption-result');
             const captionText = document.getElementById('caption-text');
-            
+
             btnText.classList.add('hidden');
             loader.classList.remove('hidden');
             resultBox.classList.add('hidden');
 
-            const apiKey = ""; 
+            const apiKey = "";
             const systemPrompt = `Write a short, trendy Instagram caption for a delicious seafood burger photo taken at Fish Burger Essaouira. 
             Include: 
             1. A pun or witty remark about fish/ocean.
@@ -857,13 +1014,13 @@
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ parts: [{ text: systemPrompt }] }] })
                 });
 
                 if (!response.ok) throw new Error();
                 const data = await response.json();
-                
+
                 // Clean up quotes if present
                 let caption = data.candidates[0].content.parts[0].text.replace(/^"|"$/g, '');
                 captionText.innerText = caption;
@@ -888,4 +1045,5 @@
         filterMenu('bestsellers');
     </script>
 </body>
+
 </html>
