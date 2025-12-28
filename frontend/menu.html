@@ -211,48 +211,56 @@
         // Menu data from the uploaded menu
         const menuItems = {
             burgers: [
-                { name: "Crispy Fish Burger", price: "70 DH", desc: "Crispy fish fillet, lettuce, coleslaw, chipotle & salsa verde, tartar & cornichons", note: "Includes 1 side for free" },
-                { name: "Double Crispy Fish Burger", price: "110 DH", desc: "2 crispy fish fillets, lettuce, coleslaw, chipotle & salsa verde, tartar & cornichons" },
-                { name: "Sardine Burger", price: "60 DH", desc: "2 grilled hashed sardine patties, cheese, lettuce, coleslaw & caramelized onions" },
-                { name: "Tofu Burger", price: "75 DH", desc: "Crispy tofu, lettuce, coleslaw, tomatoes, extra fries and chipotle sauce", veg: true },
-                { name: "Calamari Burger", price: "75 DH", desc: "Crispy calamari rings, lettuce, coleslaw & tapas" },
-                { name: "Octopus Burger", price: "75 DH", desc: "Crispy chopped octopus legs, lettuce, tomatoes, cornichons & salsa verde" },
-                { name: "Burger of the Month", price: "70 DH", desc: "Monthly burger created by a FishBurger. Ask your waiter for more details" },
+                { name: "Crispy Fish Burger", price: "70 DH", desc: "Crispy fish filet, lettuce, coleslaw, chipotle, salsa verde, tartar & cornichons", note: "Best Seller - Includes 1 side for free", mini: "55 DH" },
+                { name: "Double Crispy Fish Burger", price: "110 DH", desc: "2 crispy fish filets, lettuce, coleslaw, chipotle, salsa verde, tartar & cornichons", note: "Includes 1 side for free" },
+                { name: "Sardine Burger", price: "60 DH", desc: "2 grilled hashed sardine patties, cheese, lettuce, tomatoes & caramelized onions", note: "Signature - Includes 1 side for free", mini: "45 DH" },
+                { name: "Tofu Burger", price: "75 DH", desc: "Crispy tofu, cheese, lettuce, tomatoes, salsa verde and chipotle sauce", veg: true, note: "Vegetarian - Includes 1 side for free", mini: "60 DH" },
+                { name: "Calamari Burger", price: "75 DH", desc: "Crispy calamari rings, lettuce, cornichons & tartar", note: "Includes 1 side for free", mini: "60 DH" },
+                { name: "Octopus Burger", price: "75 DH", desc: "Crispy chopped octopus legs, lettuce, tomatoes, cornichons & salsa verde", note: "Includes 1 side for free", mini: "60 DH" },
+                { name: "Burger of the Month", price: "70 DH", desc: "Monthly burger inspired by a local artist. Ask your waiter for more details", note: "Limited Edition - Includes 1 side for free", mini: "55 DH" },
             ],
             sides: [
                 { name: "Potato Fries", price: "20 DH", desc: "" },
                 { name: "Onion Rings", price: "25 DH", desc: "" },
+                { name: "Guacamole", price: "20 DH", desc: "" },
                 { name: "Coleslaw", price: "20 DH", desc: "" },
             ],
             tapas: [
-                { name: "Shrimp Salad", price: "35 DH", desc: "Shrimp, lettuce, tomatoes, onions, cucumber & olive oil" },
-                { name: "Fancy Sardines", price: "35 DH", desc: "3 crispy sardines with Moroccan sharmoula" },
-                { name: "Seafood Bones", price: "40 DH", desc: "Crispy fish bones with tartar sauce" },
-                { name: "Sardine Croquettes", price: "45 DH", desc: "3 cheese-stuffed fried sardine balls" },
-                { name: "Nachos", price: "45 DH", desc: "Nachos, cheese, guacamole, salsa verde & chipotle sauce" },
-                { name: "Fish Octopus", price: "40 DH", desc: "Fried octopus with salsa verde" },
+                { name: "Summer Salad", price: "35 DH", desc: "Avocados, lettuce, tomatoes, onions, cucumbers & vinaigrette" },
+                { name: "Fancy Sardines", price: "20 DH", desc: "3 crispy fresh sardines, stuffed with sharmoula" },
+                { name: "Seafood Basket", price: "60 DH", desc: "Fried seafood mix & potato chips" },
+                { name: "Nachos", price: "45 DH", desc: "Golden tortilla chips, guacamole, pico de gallo, chipotle sauce and salsa verde" },
+                { name: "Msemmen Fish Tacos", price: "35 DH", desc: "2 Moroccan tortilla, crispy white fish, veggies, salsa verde and chipotle sauce" },
+                { name: "Sardine Croquettes", price: "30 DH", desc: "3 crispy sardine balls, cheese stuffed" },
+                { name: "Calamari Rings", price: "40 DH", desc: "5 crispy rings & tartar sauce" },
+                { name: "Fish Nuggets", price: "30 DH", desc: "3 crispy fish nuggets & tartar sauce" },
+                { name: "Mozzarella Sticks", price: "30 DH", desc: "5 sticks & marinara sauce" },
+                { name: "Fried Octopus", price: "40 DH", desc: "Crispy octopus slices" },
             ],
             globe: [
-                { name: "Fish & Chips", price: "70 DH", desc: "Battered fried fish, fries & tartar" },
-                { name: "Seafood Burrito", price: "70 DH", desc: "Crispy fish, guacamole, rice, salsa verde & chipotle" },
-                { name: "Po Boy Sandwich", price: "50 DH", desc: "Big fried fish, tartar, lettuce in a baguette" },
-                { name: "Bocadillo de Calamares", price: "50 DH", desc: "Crispy calamari rings in a baguette" },
-                { name: "Calamari Bruschetta", price: "45 DH", desc: "Crispy calamari rings on grilled bread" },
-                { name: "Avocado Toast", price: "45 DH", desc: "Avocado, cherry tomatoes, olive oil on toast" },
-                { name: "Fish Fillet Toast", price: "60 DH", desc: "Grilled fish fillet, lettuce, tartar on toast" },
+                { name: "Fish & Chips", price: "70 DH", desc: "Crispy fish fillets, potato chips, coleslaw & tartar" },
+                { name: "Seafood Burrito", price: "70 DH", desc: "Crispy white fish, guacamole, rice, lettuce, coleslaw, salsa verde & chipotle sauce" },
+                { name: "Po' Boy Sandwich", price: "50 DH", desc: "Crispy white fish, lettuce, tomatoes & tartar" },
+                { name: "Bocadillo de Calamares", price: "50 DH", desc: "Crispy calamari rings, lettuce, tomatoes, onions & tartar" },
+                { name: "Octopus Sandwich", price: "60 DH", desc: "Marinated octopus, marinara, pico de gallo & chipotle sauce" },
+                { name: "Calamari Bruschetta", price: "45 DH", desc: "Sourdough, crispy calamari rings, marinara & cilantro" },
+                { name: "Avocado Toast", price: "45 DH", desc: "Sourdough, avocados, fresh herbs & salsa verde" },
+                { name: "Fish Fillet Toast", price: "60 DH", desc: "Sourdough, crispy fish fillet, tartar, cornichons & chipotle sauce" },
             ],
             desserts: [
-                { name: "Cinnamon Cherry & Honey Pastilla", price: "", desc: "Traditional Moroccan dessert" },
-                { name: "Ice Cream Cookie & Oreos", price: "", desc: "Ice cream with cookies and Oreos" },
-                { name: "Cheesecake", price: "", desc: "Classic cheesecake" },
+                { name: "Cinnabun Crumble Topped Icecream", price: "35 DH", desc: "" },
+                { name: "Ice Cream Cookie-Burger", price: "40 DH", desc: "" },
+                { name: "2 Chocolate Chip Cookies", price: "20 DH", desc: "" },
             ],
             drinks: [
                 { name: "Soda", price: "15 DH", desc: "" },
-                { name: "Still Water 0.5L", price: "10/20 DH", desc: "" },
-                { name: "Sparkling Water 0.5L", price: "", desc: "" },
-                { name: "Espresso", price: "10 DH", desc: "" },
+                { name: "Still Water 33cl/1.5l", price: "10/30 DH", desc: "" },
+                { name: "Sparkling Water 33cl", price: "15 DH", desc: "" },
+                { name: "Ginger Mint Lemonade", price: "20 DH", desc: "" },
+                { name: "Espresso", price: "20 DH", desc: "" },
                 { name: "Americano", price: "20 DH", desc: "" },
                 { name: "Iced Coffee", price: "25 DH", desc: "" },
+                { name: "Iced Tea", price: "20 DH", desc: "" },
             ]
         };
 
@@ -285,6 +293,21 @@
                 const el = document.createElement('div');
                 el.className = 'bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-transparent hover:border-red-200 relative group transform hover:scale-105 hover:-translate-y-2';
                 el.style.animationDelay = `${index * 0.1}s`;
+
+                // Build price display with mini option
+                const priceDisplay = item.mini
+                    ? `<div class="flex flex-col">
+                         <div class="flex items-center gap-2">
+                           <span class="text-xs text-slate-500 uppercase">Burger:</span>
+                           <span class="text-xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${item.price}</span>
+                         </div>
+                         <div class="flex items-center gap-2">
+                           <span class="text-xs text-slate-500 uppercase">Mini:</span>
+                           <span class="text-lg font-bold text-blue-600">${item.mini}</span>
+                         </div>
+                       </div>`
+                    : `<span class="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${item.price || 'Ask waiter'}</span>`;
+
                 el.innerHTML = `
                     ${badge}
                     <div class="mb-5">
@@ -297,7 +320,7 @@
                         ${item.desc ? `<p class="text-slate-600 text-sm leading-relaxed">${item.desc}</p>` : ''}
                     </div>
                     <div class="flex justify-between items-center border-t-2 border-slate-100 pt-4">
-                        <span class="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">${item.price || 'Ask waiter'}</span>
+                        ${priceDisplay}
                         <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <i class="fa-solid fa-arrow-right text-red-600 text-xl"></i>
                         </div>

@@ -16,6 +16,33 @@
     <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -416,6 +443,9 @@
             } else {
                 emptyState.classList.add('hidden');
             }
+
+            // Generate QR codes for preparing orders
+            setTimeout(() => generateQRCodes(), 100);
         }
 
         // Create order card HTML
@@ -452,13 +482,24 @@
                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">
                        <i class="fa-solid fa-fire-burner"></i> Start Preparing
                    </button>`
-                : `<button onclick="updateStatus('${order.id}', 'ready')" 
-                       class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">
-                       <i class="fa-solid fa-check"></i> Mark as Ready
-                   </button>`;
+                : `<div class="space-y-3">
+                       <button onclick="updateStatus('${order.id}', 'ready')" 
+                           class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">
+                           <i class="fa-solid fa-check"></i> Mark as Ready
+                       </button>
+                       <div class="bg-slate-50 rounded-xl p-4 border-2 border-dashed border-slate-300">
+                           <div class="text-center mb-3">
+                               <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                   <i class="fa-solid fa-qrcode mr-1"></i> Delivery QR Code
+                               </div>
+                               <div class="text-[10px] text-slate-400">Driver scans to start delivery</div>
+                           </div>
+                           <div id="qr-${order.id}" class="flex justify-center"></div>
+                       </div>
+                   </div>`;
 
             return `
-                <div class="order-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="order-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow" data-order-id="${order.id}" data-order-number="${order.orderNumber}">
                     <div class="p-6">
                         <div class="flex items-start justify-between mb-4">
                             <div>
@@ -499,6 +540,36 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Generate QR codes for preparing orders
+        function generateQRCodes() {
+            document.querySelectorAll('[data-order-id]').forEach(card => {
+                const orderId = card.dataset.orderId;
+                const orderNumber = card.dataset.orderNumber;
+                const qrContainer = card.querySelector(`#qr-${orderId}`);
+
+                if (qrContainer && !qrContainer.hasChildNodes()) {
+                    // Create QR code link to delivery action page
+                    const actionUrl = `${window.location.origin}/frontend/delivery-action.html?id=${orderId}&order=${orderNumber}`;
+
+                    QRCode.toCanvas(document.createElement('canvas'), actionUrl, {
+                        width: 120,
+                        margin: 1,
+                        color: {
+                            dark: '#1e3a8a',
+                            light: '#f8fafc'
+                        }
+                    }, (error, canvas) => {
+                        if (error) {
+                            console.error('QR Code error:', error);
+                            return;
+                        }
+                        canvas.style.borderRadius = '8px';
+                        qrContainer.appendChild(canvas);
+                    });
+                }
+            });
         }
 
         // Update order status

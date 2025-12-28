@@ -24,8 +24,31 @@
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="dns-prefetch" href="https://www.gstatic.com">
 
-    <!-- Tailwind CSS - Defer for non-critical rendering -->
-    <script src="https://cdn.tailwindcss.com" defer></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <!-- Font Awesome - Async loading for better performance -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -37,13 +60,13 @@
     <!-- Lenis Smooth Scroll - Defer for non-critical rendering -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js" defer></script>
 
-    <!-- Fonts: Playfair Display (Headings) & DM Sans (Body) - Optimized loading -->
+    <!-- Fonts: Lobster (Headings) & DM Sans (Body) - Optimized loading -->
     <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Lobster&display=swap"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link
-            href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Lobster&display=swap"
             rel="stylesheet">
     </noscript>
 
@@ -57,7 +80,7 @@
         h3,
         h4,
         .serif {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Lobster', cursive;
         }
 
         /* Lenis Recommended CSS */
@@ -108,7 +131,7 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #dc2626;
+            background: #FF4500;
         }
 
         /* Custom Scrollbar for Cart */
@@ -143,7 +166,7 @@
         .loader-dark {
             border: 3px solid rgba(0, 0, 0, 0.1);
             border-radius: 50%;
-            border-top: 3px solid #dc2626;
+            border-top: 3px solid #FF4500;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
@@ -525,12 +548,12 @@
                 <!-- Image Grid -->
                 <div class="lg:w-1/2 relative">
                     <div class="grid grid-cols-2 gap-4">
-                        <!-- Image 1 -->
-                        <img src="img/image2story.jpg" alt="Story Image 2" loading="lazy" width="400" height="320"
-                            class="rounded-3xl shadow-2xl w-full h-80 object-cover">
-                        <!-- Image 2 -->
-                        <img src="img/image1story.jpg" alt="Story Image 1" loading="lazy" width="400" height="320"
-                            class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12">
+                        <!-- Video 1 -->
+                        <video src="video/IMG_7651.mp4" autoplay loop muted playsinline
+                            class="rounded-3xl shadow-2xl w-full h-80 object-cover"></video>
+                        <!-- Video 2 -->
+                        <video src="video/IMG_7584.mp4" autoplay loop muted playsinline
+                            class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12"></video>
                     </div>
                     <!-- Central Badge -->
                     <div
@@ -614,11 +637,19 @@
                     </h2>
 
                     <!-- Enhanced Description -->
-                    <p class="text-slate-600 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light">
+                    <p class="text-slate-600 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-light mb-8">
                         A glimpse into our <span class="font-semibold text-blue-950">kitchen</span>, our <span
                             class="font-semibold text-blue-950">port</span>, and the <span
                             class="font-semibold text-red-600">soul</span> of Essaouira's finest seafood.
                     </p>
+
+                    <!-- Instagram Button -->
+                    <a href="https://instagram.com/fishburger.essaouira" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 text-white font-bold rounded-full shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 hover:scale-105 transition-all duration-300 group">
+                        <i class="fa-brands fa-instagram text-2xl group-hover:rotate-12 transition-transform"></i>
+                        <span class="uppercase tracking-wide text-sm">Follow Us on Instagram</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1109,21 +1140,43 @@
                 <!-- Right Side - Photo Grid -->
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Large Burger Image -->
-                    <div class="col-span-2 rounded-3xl overflow-hidden shadow-2xl group">
-                        <img src="img/fish-burger.png" alt="Fish Burger"
-                            class="w-full h-80 object-cover transition-transform duration-500">
+                    <div class="col-span-2 relative">
+                        <!-- Decorative Frame -->
+                        <div
+                            class="absolute -inset-2 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-[2rem] opacity-75 blur-sm">
+                        </div>
+                        <div class="relative bg-white p-2 rounded-3xl shadow-2xl">
+                            <div class="rounded-2xl overflow-hidden">
+                                <img src="img/IMG_8128.jpg" alt="Fish Burger"
+                                    class="w-full h-80 object-cover object-center scale-125 hover:scale-100 transition-transform duration-700">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Burger Image -->
-                    <div class="rounded-2xl overflow-hidden shadow-xl group">
-                        <img src="img/fancy-sardines.png" alt="Fancy Sardines"
-                            class="w-full h-48 object-cover transition-transform duration-500">
+                    <div class="relative">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-2xl opacity-75 blur-sm">
+                        </div>
+                        <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
+                            <div class="rounded-xl overflow-hidden">
+                                <img src="img/IMG_8105.jpg" alt="Fish Nuggets"
+                                    class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Drink Image -->
-                    <div class="rounded-2xl overflow-hidden shadow-xl group">
-                        <img src="img/drink.png" alt="Refreshing Drink"
-                            class="w-full h-48 object-cover transition-transform duration-500">
+                    <!-- Second Food Image -->
+                    <div class="relative">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-2xl opacity-75 blur-sm">
+                        </div>
+                        <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
+                            <div class="rounded-xl overflow-hidden">
+                                <img src="img/IMG_8073.jpg" alt="Fish Burger"
+                                    class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1133,7 +1186,7 @@
 
         <!-- Visit Us / Contact Section -->
         <footer id="contact"
-            class="relative bg-gradient-to-b from-blue-950 to-blue-900 text-white py-8 overflow-hidden">
+            class="relative bg-gradient-to-b from-blue-950 to-blue-900 text-white py-8 overflow-hidden mt-16">
             <!-- Decorative Background -->
             <div class="absolute inset-0 opacity-5"
                 style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 30px 30px;">
@@ -1154,9 +1207,9 @@
                 <!-- Enhanced Compact Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
 
-                    <!-- Location Card -->
-                    <div
-                        class="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-red-500/50 hover:shadow-xl hover:shadow-red-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                    <!-- Location Card (Essaouira) -->
+                    <div id="essaouira-location-card"
+                        class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-red-500/50 hover:shadow-xl hover:shadow-red-500/10 transition-all duration-300 text-center hover:-translate-y-1">
                         <div
                             class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/30 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-location-dot text-white text-lg"></i>
@@ -1171,17 +1224,47 @@
                         </a>
                     </div>
 
-                    <!-- Phone Card -->
-                    <div
-                        class="group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                    <!-- Location Card (Casablanca) -->
+                    <div id="casa-location-card"
+                        class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-red-500/50 hover:shadow-xl hover:shadow-red-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-600/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-location-dot text-white text-lg"></i>
+                        </div>
+                        <h3 class="font-bold text-sm mb-2 text-white">Location</h3>
+                        <p class="text-blue-200 text-xs mb-1">FishBurger Casablanca</p>
+                        <p class="text-white font-semibold text-xs mb-3">Casablanca, Morocco</p>
+                        <a href="https://maps.app.goo.gl/GqK4NJBjBdcV5L5J7" target="_blank"
+                            class="inline-flex items-center gap-1 text-red-400 hover:text-red-300 transition-colors text-xs font-medium">
+                            <i class="fa-solid fa-directions"></i>
+                            <span>Get Directions</span>
+                        </a>
+                    </div>
+
+                    <!-- Phone Card (Essaouira locations only) -->
+                    <div id="essaouira-phone-card"
+                        class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 text-center hover:-translate-y-1">
                         <div
                             class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-phone text-white text-lg"></i>
                         </div>
                         <h3 class="font-bold text-sm mb-3 text-white">Call Us</h3>
-                        <a href="tel:+212600000000"
+                        <a href="tel:+212624440400"
                             class="text-blue-200 hover:text-white transition-colors text-sm font-medium">+212
-                            600-000000</a>
+                            624-440400</a>
+                    </div>
+
+                    <!-- Phone Card (Casablanca only) -->
+                    <div id="casa-phone-card"
+                        class="hidden group bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-5 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 text-center hover:-translate-y-1">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-phone text-white text-lg"></i>
+                        </div>
+                        <h3 class="font-bold text-sm mb-3 text-white">Call Us</h3>
+                        <a href="tel:+212624400402"
+                            class="text-blue-200 hover:text-white transition-colors text-sm font-medium">+212
+                            624-400402</a>
                     </div>
 
                     <!-- Hours Card -->
@@ -1909,6 +1992,47 @@
                 animation: slideUp 0.3s ease-out;
             }
         </style>
+
+        <!-- Location-based phone visibility -->
+        <script>
+            (function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const location = urlParams.get('location') || localStorage.getItem('selectedLocation');
+
+                // Show phone card only for Essaouira locations (rooftop or medina)
+                if (location === 'rooftop' || location === 'medina') {
+                    const phoneCard = document.getElementById('essaouira-phone-card');
+                    if (phoneCard) {
+                        phoneCard.classList.remove('hidden');
+                    }
+                }
+            })();
+
+            // Show phone card only for Casablanca
+            (function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const location = urlParams.get('location') || localStorage.getItem('selectedLocation');
+
+                if (location === 'casa') {
+                    const casaPhoneCard = document.getElementById('casa-phone-card');
+                    if (casaPhoneCard) {
+                        casaPhoneCard.classList.remove('hidden');
+                    }
+                    const casaLocationCard = document.getElementById('casa-location-card');
+                    if (casaLocationCard) {
+                        casaLocationCard.classList.remove('hidden');
+                    }
+                }
+
+                // Show Essaouira location card for rooftop/medina
+                if (location === 'rooftop' || location === 'medina') {
+                    const essaouiraLocationCard = document.getElementById('essaouira-location-card');
+                    if (essaouiraLocationCard) {
+                        essaouiraLocationCard.classList.remove('hidden');
+                    }
+                }
+            })();
+        </script>
 
 </body>
 
