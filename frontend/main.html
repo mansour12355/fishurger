@@ -1756,8 +1756,62 @@
                 });
             }
 
-            // --- AI CHEF FUNCTION (BACKEND) ---
-            window.getChefRecommendation = async function () {
+            // --- AI CHEF FUNCTION (LOCAL - No Backend Required) ---
+            // Menu recommendations with keywords for matching
+            const menuRecommendations = {
+                'Crispy Fish Burger': {
+                    keywords: ['spicy', 'crispy', 'crunchy', 'fried', 'hot', 'classic', 'best', 'popular', 'seller', 'bestseller'],
+                    description: 'Our signature Crispy Fish Burger with chipotle sauce is perfect for you! Crispy white fish with a spicy kick, creamy coleslaw, and tangy pickles.',
+                    price: '95 DH'
+                },
+                'Po Boy Sandwich': {
+                    keywords: ['big', 'hungry', 'large', 'filling', 'sandwich', 'american', 'super', 'huge', 'starving'],
+                    description: 'Try our Po Boy Sandwich - it\'s huge! A 12-inch Moroccan baguette stuffed with big fried white fish and tartar sauce. Perfect when you\'re super hungry!',
+                    price: '70 DH'
+                },
+                'Msemmen Fish Tacos': {
+                    keywords: ['fusion', 'unique', 'different', 'moroccan', 'tacos', 'flatbread', 'local', 'creative', 'special'],
+                    description: 'Go for our Msemmen Fish Tacos! A unique fusion of Moroccan flatbread and fresh fish. It\'s our most creative dish!',
+                    price: '45 DH'
+                },
+                'Fish Burger (Grilled)': {
+                    keywords: ['healthy', 'light', 'grilled', 'fresh', 'lean', 'diet', 'low', 'calorie', 'fit', 'fitness'],
+                    description: 'The Grilled Fish Burger is your best bet! Healthy grilled white fish with cheese, fresh veggies, and tartar sauce. Light but satisfying!',
+                    price: '90 DH'
+                },
+                'Octopus Burger': {
+                    keywords: ['unique', 'special', 'different', 'octopus', 'seafood', 'exotic', 'adventurous', 'adventure', 'new', 'try'],
+                    description: 'Be adventurous with our Octopus Burger! Crispy chopped octopus legs with salsa verde. Unique and absolutely delicious!',
+                    price: '110 DH'
+                },
+                'Calamari Burger': {
+                    keywords: ['crispy', 'rings', 'calamari', 'squid', 'crunchy', 'fried', 'golden'],
+                    description: 'You\'ll love our Calamari Burger! Crispy calamari rings with lettuce, pickles, and tartar sauce. Crunchy perfection!',
+                    price: '110 DH'
+                },
+                'Sardine Burger': {
+                    keywords: ['local', 'traditional', 'moroccan', 'sardine', 'authentic', 'strong', 'essaouira', 'flavor'],
+                    description: 'Try our Sardine Burger - a local favorite! Double sardine patties with caramelized onions. Authentic Essaouira flavor!',
+                    price: '90 DH'
+                },
+                'Eggplant Burger': {
+                    keywords: ['vegetarian', 'veg', 'veggie', 'plant', 'no meat', 'eggplant', 'meatless', 'green', 'vegetables'],
+                    description: 'Our Eggplant Burger is perfect for you! Crispy homemade eggplant patty with cheese and coleslaw. Vegetarian and delicious!',
+                    price: '90 DH'
+                },
+                'Fish & Chips': {
+                    keywords: ['chips', 'fries', 'british', 'english', 'classic', 'potato', 'wedges'],
+                    description: 'Classic Fish & Chips! Battered fried white fish with crispy potato wedges, coleslaw, and tartar sauce. A timeless favorite!',
+                    price: '90 DH'
+                },
+                'Fish Burrito': {
+                    keywords: ['mexican', 'burrito', 'wrap', 'guacamole', 'rice', 'filling', 'tex-mex'],
+                    description: 'Try our Fish Burrito! Crispy white fish wrapped with guacamole, rice, salsa verde, coleslaw, and chipotle sauce. Packed with flavor!',
+                    price: '90 DH'
+                }
+            };
+
+            window.getChefRecommendation = function () {
                 const craving = userCravingInput.value.trim();
                 if (!craving) {
                     aiError.classList.remove('hidden');
@@ -1772,35 +1826,53 @@
                 aiResponseDiv.classList.add('hidden');
                 aiError.classList.add('hidden');
 
-                try {
-                    const response = await fetch(`${API_URL}/chef/recommend`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ craving })
-                    });
+                // Simulate a brief "thinking" delay for better UX
+                setTimeout(() => {
+                    try {
+                        // Convert craving to lowercase for matching
+                        const cravingLower = craving.toLowerCase();
 
-                    const data = await response.json();
+                        // Find best match
+                        let bestMatch = null;
+                        let maxScore = 0;
 
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Failed to get recommendation');
+                        for (const [dish, data] of Object.entries(menuRecommendations)) {
+                            let score = 0;
+                            for (const keyword of data.keywords) {
+                                if (cravingLower.includes(keyword)) {
+                                    score++;
+                                }
+                            }
+                            if (score > maxScore) {
+                                maxScore = score;
+                                bestMatch = { dish, ...data };
+                            }
+                        }
+
+                        // If no keyword match, provide a default recommendation
+                        if (!bestMatch || maxScore === 0) {
+                            bestMatch = {
+                                dish: 'Crispy Fish Burger',
+                                description: 'Can\'t go wrong with our signature Crispy Fish Burger! It\'s our most popular dish with crispy white fish, spicy chipotle sauce, and fresh toppings.',
+                                price: '95 DH'
+                            };
+                        }
+
+                        // Display recommendation
+                        responseText.innerHTML = `<strong>${bestMatch.dish}</strong> (${bestMatch.price})<br><br>${bestMatch.description}`;
+                        aiResponseDiv.classList.remove('hidden');
+
+                    } catch (error) {
+                        console.error("AI Chef Error:", error);
+                        aiError.classList.remove('hidden');
+                        aiError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!';
+                    } finally {
+                        // Reset UI
+                        btnText.classList.remove('hidden');
+                        btnLoader.classList.add('hidden');
+                        askBtn.disabled = false;
                     }
-
-                    // Display recommendation
-                    responseText.innerHTML = `<strong>${data.recommendation.dish}</strong> (${data.recommendation.price})<br><br>${data.recommendation.description}`;
-                    aiResponseDiv.classList.remove('hidden');
-
-                } catch (error) {
-                    console.error("AI Chef Error:", error);
-                    aiError.classList.remove('hidden');
-                    aiError.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Chef is busy right now. Try again!';
-                } finally {
-                    // Reset UI
-                    btnText.classList.remove('hidden');
-                    btnLoader.classList.add('hidden');
-                    askBtn.disabled = false;
-                }
+                }, 500); // 500ms delay for natural feel
             };
 
             // --- INIT ---
