@@ -18,6 +18,24 @@
         content="Authentic seafood burgers from ocean to table. Visit us in Essaouira's Medina.">
     <meta property="og:image" content="img/image1story.jpg">
 
+    <!-- Redirection Logic: Enforce index.html as primary entry point -->
+    <script>
+        (function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const locationParam = urlParams.get('location');
+            const storedLocation = localStorage.getItem('selectedLocation');
+
+            // If location is provided in URL, save it
+            if (locationParam) {
+                localStorage.setItem('selectedLocation', locationParam);
+            }
+            // If no location in URL AND no location in localStorage, redirect to index.html
+            else if (!storedLocation) {
+                window.location.href = 'index.html';
+            }
+        })();
+    </script>
+
     <!-- Performance: Preconnect to external origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1147,7 +1165,7 @@
                         </div>
                         <div class="relative bg-white p-2 rounded-3xl shadow-2xl">
                             <div class="rounded-2xl overflow-hidden">
-                                <img src="img/IMG_8128.jpg" alt="Fish Burger"
+                                <img src="img/IMG_8128.webp" alt="Fish Burger"
                                     class="w-full h-80 object-cover object-center scale-125 hover:scale-100 transition-transform duration-700">
                             </div>
                         </div>
@@ -1160,7 +1178,7 @@
                         </div>
                         <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
                             <div class="rounded-xl overflow-hidden">
-                                <img src="img/IMG_8105.jpg" alt="Fish Nuggets"
+                                <img src="img/IMG_8105.webp" alt="Fish Nuggets"
                                     class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
                             </div>
                         </div>
@@ -1173,7 +1191,7 @@
                         </div>
                         <div class="relative bg-white p-1.5 rounded-2xl shadow-xl">
                             <div class="rounded-xl overflow-hidden">
-                                <img src="img/IMG_8073.jpg" alt="Fish Burger"
+                                <img src="img/IMG_8073.webp" alt="Fish Burger"
                                     class="w-full h-56 object-cover object-center scale-115 hover:scale-100 transition-transform duration-700">
                             </div>
                         </div>
