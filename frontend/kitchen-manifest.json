@@ -1,0 +1,36 @@
+{
+    "name": "Fish Burger Kitchen",
+    "short_name": "Kitchen",
+    "description": "Kitchen Dashboard for Fish Burger Essaouira",
+    "start_url": "/kitchen-dashboard.html",
+    "display": "standalone",
+    "background_color": "#1e3a8a",
+    "theme_color": "#1e3a8a",
+    "orientation": "landscape",
+    "icons": [
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "business",
+        "food"
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/kitchen-wide.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        }
+    ]
+}

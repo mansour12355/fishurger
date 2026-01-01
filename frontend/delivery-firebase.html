@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Dashboard (Firebase) - Fish Burger</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="description"
+        content="Delivery Dashboard for Fish Burger Essaouira - Real-time deliveries with Firebase">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Delivery">
+    <link rel="manifest" href="/delivery-manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-card {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100">
+    <!-- Header -->
+    <header class="bg-blue-950 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-red-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-motorcycle text-lg md:text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold">Delivery Dashboard 🏍️</h1>
+                        <p class="text-blue-200 text-xs md:text-sm">Firebase Real-Time</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="backoffice.html"
+                        class="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition-all border border-white/10 text-sm font-semibold">
+                        <i class="fa-solid fa-chart-line"></i>
+                        Backoffice
+                    </a>
+                    <div class="text-right">
+                        <div class="text-xs md:text-sm text-blue-200">Active Deliveries</div>
+                        <div id="total-count" class="text-xl md:text-2xl font-bold">0</div>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs md:text-sm">
+                        <span class="pulse-dot inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="text-green-300">Live</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Location Filter -->
+    <div class="bg-white border-b border-slate-200 sticky top-[70px] md:top-[88px] z-40">
+        <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4">
+                <span class="text-slate-600 font-medium text-sm md:text-base">Location:</span>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="filterLocation('all')"
+                        class="location-btn active px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-blue-950 text-white"
+                        data-location="all">
+                        All Locations
+                    </button>
+                    <button onclick="filterLocation('rooftop')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="rooftop">
+                        Rooftop
+                    </button>
+                    <button onclick="filterLocation('medina')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="medina">
+                        Medina
+                    </button>
+                    <button onclick="filterLocation('casa')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="casa">
+                        Casa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <!-- Ready Orders -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-green-100 text-green-800 px-2 md:px-3 py-1 rounded-lg text-base md:text-lg">
+                            <i class="fa-solid fa-check"></i> Ready
+                        </span>
+                        <span id="ready-count" class="text-slate-400 text-base md:text-lg">0</span>
+                    </h2>
+                </div>
+                <div id="ready-orders" class="space-y-4">
+                    <!-- Orders will be injected here -->
+                </div>
+            </div>
+
+            <!-- Out for Delivery -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg text-base md:text-lg">
+                            <i class="fa-solid fa-motorcycle"></i> Delivering
+                        </span>
+                        <span id="delivering-count" class="text-slate-400 text-base md:text-lg">0</span>
+                    </h2>
+                </div>
+                <div id="delivering-orders" class="space-y-4">
+                    <!-- Orders will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-20 hidden">
+            <div class="bg-white rounded-3xl p-12 max-w-md mx-auto shadow-sm">
+                <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-motorcycle text-3xl text-slate-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">No Active Deliveries</h3>
+                <p class="text-slate-500">Ready orders will appear here automatically</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
+            authDomain: "fishburger-system.firebaseapp.com",
+            projectId: "fishburger-system",
+            storageBucket: "fishburger-system.firebasestorage.app",
+            messagingSenderId: "1011829893886",
+            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
+            measurementId: "G-LHF8XPTL3G"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let currentLocation = 'all';
+        let unsubscribe = null;
+
+        // Filter by location
+        window.filterLocation = function (location) {
+            currentLocation = location;
+
+            // Update button states
+            document.querySelectorAll('.location-btn').forEach(btn => {
+                if (btn.dataset.location === location) {
+                    btn.classList.add('active', 'bg-blue-950', 'text-white');
+                    btn.classList.remove('bg-slate-100', 'text-slate-600');
+                } else {
+                    btn.classList.remove('active', 'bg-blue-950', 'text-white');
+                    btn.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            // Restart listener with new filter
+            listenToOrders();
+        };
+
+        // Listen to real-time orders
+        function listenToOrders() {
+            // Unsubscribe from previous listener
+            if (unsubscribe) {
+                unsubscribe();
+            }
+
+            // Build query - listen for ready and out-for-delivery orders
+            let q;
+            if (currentLocation === 'all') {
+                q = query(
+                    collection(db, 'orders'),
+                    where('status', 'in', ['ready', 'out-for-delivery'])
+                );
+            } else {
+                q = query(
+                    collection(db, 'orders'),
+                    where('location', '==', currentLocation),
+                    where('status', 'in', ['ready', 'out-for-delivery'])
+                );
+            }
+
+            // Listen to changes
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                const orders = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                displayOrders(orders);
+
+                // Log changes for debugging
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'added') {
+                        console.log('New delivery:', change.doc.data());
+                    }
+                    if (change.type === 'modified') {
+                        console.log('Modified delivery:', change.doc.data());
+                    }
+                    if (change.type === 'removed') {
+                        console.log('Removed delivery:', change.doc.data());
+                    }
+                });
+            }, (error) => {
+                console.error('Error listening to orders:', error);
+            });
+        }
+
+        // Display orders
+        function displayOrders(orders) {
+            const readyOrders = orders.filter(o => o.status === 'ready');
+            const deliveringOrders = orders.filter(o => o.status === 'out-for-delivery');
+
+            // Update counts
+            document.getElementById('ready-count').textContent = readyOrders.length;
+            document.getElementById('delivering-count').textContent = deliveringOrders.length;
+            document.getElementById('total-count').textContent = orders.length;
+
+            // Display ready orders
+            const readyContainer = document.getElementById('ready-orders');
+            if (readyOrders.length === 0) {
+                readyContainer.innerHTML = '<div class="bg-white rounded-xl p-6 text-center text-slate-400">No orders ready for delivery</div>';
+            } else {
+                readyContainer.innerHTML = readyOrders.map(order => createOrderCard(order)).join('');
+            }
+
+            // Display delivering orders
+            const deliveringContainer = document.getElementById('delivering-orders');
+            if (deliveringOrders.length === 0) {
+                deliveringContainer.innerHTML = '<div class="bg-white rounded-xl p-6 text-center text-slate-400">No orders out for delivery</div>';
+            } else {
+                deliveringContainer.innerHTML = deliveringOrders.map(order => createOrderCard(order)).join('');
+            }
+
+            // Show/hide empty state
+            const emptyState = document.getElementById('empty-state');
+            if (orders.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        // Create order card HTML
+        function createOrderCard(order) {
+            // Handle timestamp
+            let time;
+            if (order.timestamp && order.timestamp.toDate) {
+                time = order.timestamp.toDate().toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.timestamp) {
+                time = new Date(order.timestamp).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.createdAt) {
+                time = new Date(order.createdAt).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                time = 'N/A';
+            }
+
+            const locationColors = {
+                rooftop: 'bg-purple-100 text-purple-800',
+                medina: 'bg-green-100 text-green-800',
+                casa: 'bg-orange-100 text-orange-800'
+            };
+
+            const statusActions = order.status === 'ready'
+                ? `<button onclick="updateStatus('${order.id}', 'out-for-delivery')" 
+                       class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">
+                       <i class="fa-solid fa-motorcycle"></i> Start Delivery
+                   </button>`
+                : `<button onclick="updateStatus('${order.id}', 'completed')" 
+                       class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">
+                       <i class="fa-solid fa-check-double"></i> Mark as Delivered
+                   </button>`;
+
+            return `
+                <div class="order-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-xs text-slate-500 mb-1">Order #${String(order.orderNumber || 0).padStart(3, '0')}</div>
+                                <div class="font-bold text-lg text-slate-800">${order.customer?.name || 'Unknown'}</div>
+                                <div class="text-sm text-slate-500">${time}</div>
+                            </div>
+                            <span class="${locationColors[order.location] || 'bg-slate-100 text-slate-800'} px-3 py-1 rounded-full text-xs font-bold uppercase">
+                                ${order.location || 'unknown'}
+                            </span>
+                        </div>
+
+                        <div class="bg-slate-50 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-slate-500 mb-1">Customer Contact</div>
+                            <div class="text-sm font-bold text-blue-600 mb-2">
+                                <i class="fa-solid fa-phone mr-1"></i>${order.customer?.phone || 'No phone'}
+                            </div>
+                            <div class="text-xs text-slate-500 mb-1">Delivery Address</div>
+                            <div class="text-sm font-medium text-slate-800">${order.customer?.address || 'No address provided'}</div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            ${order.items?.map(item => `
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-700">${item.name} ${item.quantity > 1 ? `x${item.quantity}` : ''}</span>
+                                    <span class="text-slate-500">${item.priceStr || item.price + ' DH'}</span>
+                                </div>
+                            `).join('') || '<div class="text-slate-400 text-sm">No items</div>'}
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-4 mb-4">
+                            <div class="flex justify-between items-center font-bold">
+                                <span class="text-slate-600">Total</span>
+                                <span class="text-blue-950 text-lg">${order.total} DH</span>
+                            </div>
+                        </div>
+
+                        ${statusActions}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update order status
+        window.updateStatus = async function (orderId, newStatus) {
+            try {
+                const orderRef = doc(db, 'orders', orderId);
+                await updateDoc(orderRef, {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                console.log(`Order ${orderId} updated to ${newStatus}`);
+                // The UI will update automatically via the listener!
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating order status: ' + error.message);
+            }
+        };
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+        });
+
+        // Start listening on page load
+        listenToOrders();
+    </script>
+</body>
+
+</html>
