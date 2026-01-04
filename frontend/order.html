@@ -7,6 +7,7 @@
     <title>Order Online - Fish Burger Essaouira</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -99,6 +100,16 @@
 </head>
 
 <body class="bg-slate-50 min-h-screen pb-24 lg:pb-0">
+
+    <!-- Redirection & Location Logic -->
+    <script>
+            (function () {
+                const storedLocation = localStorage.getItem('selectedLocation');
+                if (!storedLocation) {
+                    window.location.href = 'index.html';
+                }
+            })();
+    </script>
 
     <header class="bg-[#1e3a8a] text-white py-4 lg:py-6 sticky top-0 z-40 shadow-xl">
         <div class="container mx-auto px-4 lg:px-6">
@@ -304,8 +315,8 @@
                                                 <i
                                                     class="fa-solid fa-location-dot text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
                                             </div>
-                                            <select id="customer-location-input"
-                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-50 transition-all font-semibold appearance-none cursor-pointer">
+                                            <select id="customer-location-input" disabled
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-100 transition-all font-semibold appearance-none cursor-not-allowed opacity-75">
                                                 <option value="rooftop">Rooftop</option>
                                                 <option value="medina">Medina</option>
                                                 <option value="casa">Casa</option>
@@ -314,6 +325,69 @@
                                                 class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                                 <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Payment
+                                            Method</label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="card" checked
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-credit-card text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">Card</span>
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="domicile"
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-house text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">A
+                                                        domicile</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stripe Elements Section (Conditional) -->
+                                    <div id="stripe-card-section" class="space-y-4 pt-2">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-2 ml-1">
+                                                <label
+                                                    class="block text-[10px] font-black text-orange-500 uppercase tracking-widest">Card
+                                                    Details</label>
+                                                <div class="flex gap-2 items-center opacity-80">
+                                                    <i class="fa-brands fa-cc-visa text-lg text-blue-600"></i>
+                                                    <i class="fa-brands fa-cc-mastercard text-lg text-red-600"></i>
+                                                    <span
+                                                        class="text-[9px] font-black bg-blue-900 text-white px-1.5 py-0.5 rounded-sm tracking-tighter leading-none">CMI</span>
+                                                    <i class="fa-brands fa-cc-stripe text-lg text-[#635bff] ml-1"></i>
+                                                </div>
+                                            </div>
+                                            <!-- Stripe Element Container -->
+                                            <div id="card-element"
+                                                class="w-full rounded-xl border border-slate-200 py-4 px-4 bg-white shadow-sm transition-all focus-within:ring-2 focus-within:ring-orange-500/50 focus-within:border-orange-500">
+                                                <!-- A Stripe Element will be inserted here. -->
+                                            </div>
+                                            <!-- Used to display form errors. -->
+                                            <div id="card-errors" role="alert"
+                                                class="mt-2 text-xs text-red-600 font-medium ml-1"></div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center gap-2 opacity-50 grayscale hover:grayscale-0 transition-all">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Secure
+                                                Payment by</span>
+                                            <i class="fa-brands fa-stripe text-3xl"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -674,6 +748,29 @@
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
             const location = locationInput.value;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+            // Handle Stripe Payment
+            if (paymentMethod === 'card') {
+                const submitBtn = document.querySelector('button[onclick="confirmOrder()"]');
+                const originalText = submitBtn.innerHTML;
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Processing...';
+
+                    // For demo purposes, we simulate the Stripe flow
+                    // In a real app, you'd use: const {token, error} = await stripe.createToken(card);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    // We proceed if validation passed (mocked)
+                } catch (e) {
+                    alert("Payment processing failed. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    return;
+                }
+            }
 
             if (name && phone && address) {
                 try {
@@ -698,6 +795,7 @@
                         discount: discountAmount,
                         total: total,
                         location: location,
+                        paymentMethod: paymentMethod,
                         promoCode: appliedCode || null,
                         status: 'pending',
                         timestamp: serverTimestamp(),
@@ -726,6 +824,12 @@
                             <i class="fa-solid fa-map-pin text-white/70 mt-0.5"></i>
                             <div>
                                 <span class="font-semibold text-white">Address:</span> ${address}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-credit-card text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Payment:</span> ${paymentMethod === 'card' ? 'Card Payment' : 'Cash on Delivery (A domicile)'}
                             </div>
                         </div>
                     `;
@@ -757,6 +861,62 @@
         }
 
         // Initialize
+        const storedLoc = localStorage.getItem('selectedLocation');
+        if (storedLoc) {
+            locationInput.value = storedLoc;
+        }
+
+        // --- Stripe Integration ---
+        // Initialize Stripe with a test key
+        const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Standard Stripe Demo Key
+        const elements = stripe.elements();
+
+        // Style for Stripe Element
+        const style = {
+            base: {
+                color: '#1e293b',
+                fontFamily: '"DM Sans", sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#94a3b8'
+                }
+            },
+            invalid: {
+                color: '#ef4444',
+                iconColor: '#ef4444'
+            }
+        };
+
+        const card = elements.create('card', {
+            style: style,
+            hidePostalCode: true
+        });
+        card.mount('#card-element');
+
+        card.on('change', function (event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Handle Payment Method Toggle for Stripe Fields
+        const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+        const stripeSection = document.getElementById('stripe-card-section');
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'card') {
+                    stripeSection.classList.remove('hidden');
+                } else {
+                    stripeSection.classList.add('hidden');
+                }
+            });
+        });
+
         filterMenu('burgers');
     </script>
 </body>
