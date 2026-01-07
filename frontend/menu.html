@@ -52,6 +52,16 @@
 
 <body class="min-h-screen bg-blue-950">
 
+    <!-- Redirection & Location Logic -->
+    <script>
+        (function () {
+            const storedLocation = localStorage.getItem('selectedLocation');
+            if (!storedLocation) {
+                window.location.href = 'index.html';
+            }
+        })();
+    </script>
+
     <!-- Header -->
     <header class="backdrop-blur-md text-white py-6 sticky top-0 z-50 shadow-lg border-b border-white/10">
         <div class="container mx-auto px-6">
@@ -76,6 +86,12 @@
                         class="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 px-6 py-2 rounded-full font-bold transition-all shadow-lg">
                         Order Now
                     </a>
+                    <!-- Location Badge -->
+                    <div id="location-badge"
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold capitalize">
+                        <i class="fa-solid fa-location-dot text-red-400"></i>
+                        <span id="display-location">Loading...</span>
+                    </div>
                 </nav>
 
                 <!-- Mobile Menu Button -->
@@ -337,6 +353,10 @@
         }
 
         // Initialize with burgers
+        const storedLoc = localStorage.getItem('selectedLocation');
+        if (storedLoc) {
+            document.getElementById('display-location').textContent = storedLoc;
+        }
         filterMenu('burgers');
     </script>
 

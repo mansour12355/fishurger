@@ -7,6 +7,7 @@
     <title>Order Online - Fish Burger Essaouira</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -99,6 +100,16 @@
 </head>
 
 <body class="bg-slate-50 min-h-screen pb-24 lg:pb-0">
+
+    <!-- Redirection & Location Logic -->
+    <script>
+            (function () {
+                const storedLocation = localStorage.getItem('selectedLocation');
+                if (!storedLocation) {
+                    window.location.href = 'index.html';
+                }
+            })();
+    </script>
 
     <header class="bg-[#1e3a8a] text-white py-4 lg:py-6 sticky top-0 z-40 shadow-xl">
         <div class="container mx-auto px-4 lg:px-6">
@@ -304,8 +315,8 @@
                                                 <i
                                                     class="fa-solid fa-location-dot text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
                                             </div>
-                                            <select id="customer-location-input"
-                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-50 transition-all font-semibold appearance-none cursor-pointer">
+                                            <select id="customer-location-input" disabled
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-100 transition-all font-semibold appearance-none cursor-not-allowed opacity-75">
                                                 <option value="rooftop">Rooftop</option>
                                                 <option value="medina">Medina</option>
                                                 <option value="casa">Casa</option>
@@ -314,6 +325,69 @@
                                                 class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                                 <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Payment
+                                            Method</label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="card" checked
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-credit-card text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">Card</span>
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="domicile"
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-house text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">A
+                                                        domicile</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stripe Elements Section (Conditional) -->
+                                    <div id="stripe-card-section" class="space-y-4 pt-2">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-2 ml-1">
+                                                <label
+                                                    class="block text-[10px] font-black text-orange-500 uppercase tracking-widest">Card
+                                                    Details</label>
+                                                <div class="flex gap-2 items-center opacity-80">
+                                                    <i class="fa-brands fa-cc-visa text-lg text-blue-600"></i>
+                                                    <i class="fa-brands fa-cc-mastercard text-lg text-red-600"></i>
+                                                    <span
+                                                        class="text-[9px] font-black bg-blue-900 text-white px-1.5 py-0.5 rounded-sm tracking-tighter leading-none">CMI</span>
+                                                    <i class="fa-brands fa-cc-stripe text-lg text-[#635bff] ml-1"></i>
+                                                </div>
+                                            </div>
+                                            <!-- Stripe Element Container -->
+                                            <div id="card-element"
+                                                class="w-full rounded-xl border border-slate-200 py-4 px-4 bg-white shadow-sm transition-all focus-within:ring-2 focus-within:ring-orange-500/50 focus-within:border-orange-500">
+                                                <!-- A Stripe Element will be inserted here. -->
+                                            </div>
+                                            <!-- Used to display form errors. -->
+                                            <div id="card-errors" role="alert"
+                                                class="mt-2 text-xs text-red-600 font-medium ml-1"></div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center gap-2 opacity-50 grayscale hover:grayscale-0 transition-all">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Secure
+                                                Payment by</span>
+                                            <i class="fa-brands fa-stripe text-3xl"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -388,76 +462,100 @@
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc, serverTimestamp, doc, runTransaction, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, runTransaction, getDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
-            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
-            authDomain: "fishburger-system.firebaseapp.com",
-            projectId: "fishburger-system",
-            storageBucket: "fishburger-system.firebasestorage.app",
-            messagingSenderId: "1011829893886",
-            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
-            measurementId: "G-LHF8XPTL3G"
+            apiKey: "AIzaSyDH78fxDaNoqGAzyuPvuGMAoI09xlm8G_8",
+            authDomain: "schedulesfishburger.firebaseapp.com",
+            projectId: "schedulesfishburger",
+            storageBucket: "schedulesfishburger.firebasestorage.app",
+            messagingSenderId: "90025578074",
+            appId: "1:90025578074:web:a23dc45d6b4d1e2b0b5263",
+            measurementId: "G-02T4XQD19G"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
         // --- DATA ---
-        const menuItems = {
-            burgers: [
-                { name: "Crispy Fish Burger", price: "70 DH", mini: "55 DH", desc: "Crispy fish filet, lettuce, coleslaw, chipotle, salsa verde, tartar & cornichons" },
-                { name: "Double Crispy Fish Burger", price: "110 DH", desc: "2 crispy fish filets, lettuce, coleslaw, chipotle, salsa verde, tartar & cornichons" },
-                { name: "Sardine Burger", price: "60 DH", mini: "45 DH", desc: "2 grilled hashed sardine patties, cheese, lettuce, tomatoes & caramelized onions" },
-                { name: "Tofu Burger", price: "75 DH", mini: "60 DH", desc: "Crispy tofu, cheese, lettuce, tomatoes, salsa verde and chipotle sauce", veg: true },
-                { name: "Calamari Burger", price: "75 DH", mini: "60 DH", desc: "Crispy calamari rings, lettuce, cornichons & tartar" },
-                { name: "Octopus Burger", price: "75 DH", mini: "60 DH", desc: "Crispy chopped octopus legs, lettuce, tomatoes, cornichons & salsa verde" },
-                { name: "Burger of the Month", price: "70 DH", mini: "55 DH", desc: "Monthly burger inspired by a local artist. Ask your waiter for more details" },
-            ],
-            sides: [
-                { name: "Potato Fries", price: "20 DH", desc: "" },
-                { name: "Onion Rings", price: "25 DH", desc: "" },
-                { name: "Guacamole", price: "20 DH", desc: "" },
-                { name: "Coleslaw", price: "20 DH", desc: "" },
-            ],
-            tapas: [
-                { name: "Summer Salad", price: "35 DH", desc: "Avocados, lettuce, tomatoes, onions, cucumbers & vinaigrette" },
-                { name: "Fancy Sardines", price: "20 DH", desc: "3 crispy fresh sardines, stuffed with sharmoula" },
-                { name: "Seafood Basket", price: "60 DH", desc: "Fried seafood mix & potato chips" },
-                { name: "Nachos", price: "45 DH", desc: "Golden tortilla chips, guacamole, pico de gallo, chipotle sauce and salsa verde" },
-                { name: "Msemmen Fish Tacos", price: "35 DH", desc: "2 Moroccan tortilla, crispy white fish, veggies, salsa verde and chipotle sauce" },
-                { name: "Sardine Croquettes", price: "30 DH", desc: "3 crispy sardine balls, cheese stuffed" },
-                { name: "Calamari Rings", price: "40 DH", desc: "5 crispy rings & tartar sauce" },
-                { name: "Fish Nuggets", price: "30 DH", desc: "3 crispy fish nuggets & tartar sauce" },
-                { name: "Mozzarella Sticks", price: "30 DH", desc: "5 sticks & marinara sauce" },
-                { name: "Fried Octopus", price: "40 DH", desc: "Crispy octopus slices" },
-            ],
-            globe: [
-                { name: "Fish & Chips", price: "70 DH", desc: "Crispy fish fillets, potato chips, coleslaw & tartar" },
-                { name: "Seafood Burrito", price: "70 DH", desc: "Crispy white fish, guacamole, rice, lettuce, coleslaw, salsa verde & chipotle sauce" },
-                { name: "Po' Boy Sandwich", price: "50 DH", desc: "Crispy white fish, lettuce, tomatoes & tartar" },
-                { name: "Bocadillo de Calamares", price: "50 DH", desc: "Crispy calamari rings, lettuce, tomatoes, onions & tartar" },
-                { name: "Octopus Sandwich", price: "60 DH", desc: "Marinated octopus, marinara, pico de gallo & chipotle sauce" },
-                { name: "Calamari Bruschetta", price: "45 DH", desc: "Sourdough, crispy calamari rings, marinara & cilantro" },
-                { name: "Avocado Toast", price: "45 DH", desc: "Sourdough, avocados, fresh herbs & salsa verde" },
-                { name: "Fish Fillet Toast", price: "60 DH", desc: "Sourdough, crispy fish fillet, tartar, cornichons & chipotle sauce" },
-            ],
-            desserts: [
-                { name: "Cinnabun Crumble Topped Icecream", price: "35 DH", desc: "" },
-                { name: "Ice Cream Cookie-Burger", price: "40 DH", desc: "" },
-                { name: "2 Chocolate Chip Cookies", price: "20 DH", desc: "" },
-            ],
-            drinks: [
-                { name: "Soda", price: "15 DH", desc: "" },
-                { name: "Still Water 33cl/1.5l", price: "10 DH", desc: "" },
-                { name: "Sparkling Water 33cl", price: "15 DH", desc: "" },
-                { name: "Ginger Mint Lemonade", price: "20 DH", desc: "" },
-                { name: "Espresso", price: "20 DH", desc: "" },
-                { name: "Americano", price: "20 DH", desc: "" },
-                { name: "Iced Coffee", price: "25 DH", desc: "" },
-                { name: "Iced Tea", price: "20 DH", desc: "" },
-            ]
+        // --- DATA ---
+        let menuItems = {
+            burgers: [],
+            sides: [],
+            tapas: [],
+            globe: [],
+            desserts: [],
+            drinks: []
         };
+
+        // Fetch menu from Firebase dynamically
+        async function fetchAndOrganizeMenu() {
+            try {
+                // Determine user's location (default to medina if not set, logic can be improved)
+                let selectedLocation = localStorage.getItem('selectedLocation');
+                if (!selectedLocation) {
+                    console.warn('No location selected, defaulting to medina for display');
+                    selectedLocation = 'medina';
+                }
+                selectedLocation = selectedLocation.toLowerCase();
+
+                const menuRef = collection(db, 'menu');
+                const snapshot = await getDocs(menuRef);
+
+                // Reset arrays
+                menuItems = { burgers: [], sides: [], tapas: [], globe: [], desserts: [], drinks: [] };
+
+                snapshot.forEach(doc => {
+                    const item = doc.data();
+
+                    // Availability Check
+                    // 1. Global Availability Check
+                    let isAvailable = item.available !== false;
+
+                    // 2. Branch Availability Check
+                    if (isAvailable) {
+                        // Construct field name (e.g., availableMedina, availableRooftop)
+                        const branchField = 'available' + selectedLocation.charAt(0).toUpperCase() + selectedLocation.slice(1);
+                        if (item[branchField] === false) {
+                            isAvailable = false;
+                        }
+                    }
+
+                    // 3. Add to category
+                    if (menuItems[item.category]) {
+                        // Format price for display
+                        const displayItem = {
+                            ...item,
+                            price: item.price + " DH",
+                            mini: item.mini ? item.mini + " DH" : undefined,
+                            soldOut: !isAvailable // Mark as sold out if not available
+                        };
+                        menuItems[item.category].push(displayItem);
+                    }
+                });
+
+                // Update UI after fetching
+                // Determine current active tab
+                let activeCategory = 'burgers'; // Default
+                tabs.forEach(tab => {
+                    if (tab.classList.contains('bg-blue-950')) {
+                        activeCategory = tab.dataset.category || tab.textContent.trim().toLowerCase();
+                        if (activeCategory === 'taste the globe') activeCategory = 'globe';
+                    }
+                });
+
+                // Force refresh of the current view
+                window.filterMenu(activeCategory);
+
+                console.log('Menu loaded for location:', selectedLocation);
+
+            } catch (error) {
+                console.error("Error fetching menu:", error);
+            }
+        }
+
+        // Load menu on startup
+        fetchAndOrganizeMenu();
 
         let cart = [];
         let discountPercent = 0;
@@ -504,7 +602,11 @@
 
             items.forEach((item, index) => {
                 const el = document.createElement('div');
-                el.className = 'bg-slate-50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col justify-between fade-enter hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300';
+                const isSoldOut = item.soldOut;
+
+                // Card CSS: Add grayscale/opacity if sold out
+                const baseClasses = 'bg-slate-50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col justify-between fade-enter hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative';
+                el.className = isSoldOut ? baseClasses + ' opacity-75 grayscale' : baseClasses;
 
                 // Build price display with mini option
                 const priceDisplay = item.mini
@@ -520,22 +622,32 @@
                        </div>`
                     : `<span class="text-2xl font-bold text-orange-600 tracking-tight">${item.price}</span>`;
 
-                // Build add to cart buttons (with size options for burgers with mini)
-                const addButtons = item.mini
-                    ? `<div class="flex gap-2">
-                         <button onclick="addToCart('${item.name}', '${item.price}')"
-                           class="bg-orange-50 hover:bg-orange-100 text-orange-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-orange-200">
-                           <i class="fa-solid fa-plus text-xs"></i> Burger
-                         </button>
-                         <button onclick="addToCart('${item.name} (Mini)', '${item.mini}')"
-                           class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-blue-200">
-                           <i class="fa-solid fa-plus text-xs"></i> Mini
-                         </button>
-                       </div>`
-                    : `<button onclick="addToCart('${item.name}', '${item.price}')"
-                         class="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-sm border border-slate-200 hover:border-blue-200">
-                         <i class="fa-solid fa-plus text-sm"></i>
-                       </button>`;
+                // Build buttons OR Sold Out message
+                let actionArea = '';
+
+                if (isSoldOut) {
+                    actionArea = `
+                        <div class="bg-slate-200 text-slate-500 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300">
+                            Sold Out
+                        </div>
+                    `;
+                } else {
+                    actionArea = item.mini
+                        ? `<div class="flex gap-2">
+                             <button onclick="addToCart('${item.name}', '${item.price}')"
+                               class="bg-orange-50 hover:bg-orange-100 text-orange-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-orange-200">
+                               <i class="fa-solid fa-plus text-xs"></i> Burger
+                             </button>
+                             <button onclick="addToCart('${item.name} (Mini)', '${item.mini}')"
+                               class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-blue-200">
+                               <i class="fa-solid fa-plus text-xs"></i> Mini
+                             </button>
+                           </div>`
+                        : `<button onclick="addToCart('${item.name}', '${item.price}')"
+                             class="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-sm border border-slate-200 hover:border-blue-200">
+                             <i class="fa-solid fa-plus text-sm"></i>
+                           </button>`;
+                }
 
                 el.innerHTML = `
                     <div class="mb-4">
@@ -547,7 +659,7 @@
                     </div>
                     <div class="flex justify-between items-end mt-auto pt-4">
                         ${priceDisplay}
-                        ${addButtons}
+                        ${actionArea}
                     </div>
                 `;
                 menuGrid.appendChild(el);
@@ -674,6 +786,29 @@
             const phone = phoneInput.value.trim();
             const address = addressInput.value.trim();
             const location = locationInput.value;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+            // Handle Stripe Payment
+            if (paymentMethod === 'card') {
+                const submitBtn = document.querySelector('button[onclick="confirmOrder()"]');
+                const originalText = submitBtn.innerHTML;
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Processing...';
+
+                    // For demo purposes, we simulate the Stripe flow
+                    // In a real app, you'd use: const {token, error} = await stripe.createToken(card);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    // We proceed if validation passed (mocked)
+                } catch (e) {
+                    alert("Payment processing failed. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    return;
+                }
+            }
 
             if (name && phone && address) {
                 try {
@@ -698,6 +833,7 @@
                         discount: discountAmount,
                         total: total,
                         location: location,
+                        paymentMethod: paymentMethod,
                         promoCode: appliedCode || null,
                         status: 'pending',
                         timestamp: serverTimestamp(),
@@ -726,6 +862,12 @@
                             <i class="fa-solid fa-map-pin text-white/70 mt-0.5"></i>
                             <div>
                                 <span class="font-semibold text-white">Address:</span> ${address}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-credit-card text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Payment:</span> ${paymentMethod === 'card' ? 'Card Payment' : 'Cash on Delivery (A domicile)'}
                             </div>
                         </div>
                     `;
@@ -757,6 +899,62 @@
         }
 
         // Initialize
+        const storedLoc = localStorage.getItem('selectedLocation');
+        if (storedLoc) {
+            locationInput.value = storedLoc;
+        }
+
+        // --- Stripe Integration ---
+        // Initialize Stripe with a test key
+        const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Standard Stripe Demo Key
+        const elements = stripe.elements();
+
+        // Style for Stripe Element
+        const style = {
+            base: {
+                color: '#1e293b',
+                fontFamily: '"DM Sans", sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#94a3b8'
+                }
+            },
+            invalid: {
+                color: '#ef4444',
+                iconColor: '#ef4444'
+            }
+        };
+
+        const card = elements.create('card', {
+            style: style,
+            hidePostalCode: true
+        });
+        card.mount('#card-element');
+
+        card.on('change', function (event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Handle Payment Method Toggle for Stripe Fields
+        const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+        const stripeSection = document.getElementById('stripe-card-section');
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'card') {
+                    stripeSection.classList.remove('hidden');
+                } else {
+                    stripeSection.classList.add('hidden');
+                }
+            });
+        });
+
         filterMenu('burgers');
     </script>
 </body>

@@ -1,0 +1,11 @@
+# Make login the primary/default page
+/    /login.html   200
+
+# Login routes
+/login    /login.html   200
+/login.html    /login.html   200
+
+# Dashboard routes
+/dashboard    /index.html   200
+/index    /index.html   200
+/index.html    /index.html   200

@@ -33,6 +33,14 @@
             else if (!storedLocation) {
                 window.location.href = 'index.html';
             }
+
+            // Update location display after DOM loads
+            document.addEventListener('DOMContentLoaded', () => {
+                const displayLoc = document.getElementById('display-location');
+                if (displayLoc) {
+                    displayLoc.textContent = localStorage.getItem('selectedLocation') || 'Select Location';
+                }
+            });
         })();
     </script>
 
@@ -301,6 +309,13 @@
                     Visit Us
                 </a>
 
+                <!-- Location Badge -->
+                <div id="location-badge"
+                    class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold capitalize">
+                    <i class="fa-solid fa-location-dot text-red-500"></i>
+                    <span id="display-location">...</span>
+                </div>
+
                 <!-- Hamburger Menu Button -->
                 <button id="fixed-menu-btn"
                     class="bg-slate-900/90 backdrop-blur-md border border-slate-700/50 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-800 hover:border-red-500/50 transition-all duration-300 shadow-lg hover:shadow-red-500/20 group">
@@ -567,11 +582,11 @@
                 <div class="lg:w-1/2 relative">
                     <div class="grid grid-cols-2 gap-4">
                         <!-- Video 1 -->
-                        <video src="video/IMG_7651.mp4" autoplay loop muted playsinline
-                            class="rounded-3xl shadow-2xl w-full h-80 object-cover"></video>
+                        <video src="video/IMG_7651.mp4" poster="img/IMG_7651_poster.jpg" autoplay loop muted playsinline
+                            webkit-playsinline class="rounded-3xl shadow-2xl w-full h-80 object-cover"></video>
                         <!-- Video 2 -->
-                        <video src="video/IMG_7584.mp4" autoplay loop muted playsinline
-                            class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12"></video>
+                        <video src="video/IMG_7584.mp4" poster="img/IMG_7584_poster.jpg" autoplay loop muted playsinline
+                            webkit-playsinline class="rounded-3xl shadow-2xl w-full h-80 object-cover mt-12"></video>
                     </div>
                     <!-- Central Badge -->
                     <div
