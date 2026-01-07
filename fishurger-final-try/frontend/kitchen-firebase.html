@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitchen Dashboard (Firebase) - Fish Burger</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Kitchen Dashboard for Fish Burger Essaouira - Real-time orders with Firebase">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kitchen">
+    <link rel="manifest" href="/kitchen-manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-card {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .pulse-dot {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-100">
+    <!-- Header -->
+    <header class="bg-blue-950 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-red-600 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-fish text-lg md:text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold">Kitchen Dashboard 🔥</h1>
+                        <p class="text-blue-200 text-xs md:text-sm">Firebase Real-Time</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="backoffice.html"
+                        class="hidden md:flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition-all border border-white/10 text-sm font-semibold">
+                        <i class="fa-solid fa-chart-line"></i>
+                        Backoffice
+                    </a>
+                    <div class="text-right">
+                        <div class="text-xs md:text-sm text-blue-200">Active Orders</div>
+                        <div id="total-count" class="text-xl md:text-2xl font-bold">0</div>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs md:text-sm">
+                        <span class="pulse-dot inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span class="text-green-300">Live</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Location Filter -->
+    <div class="bg-white border-b border-slate-200 sticky top-[70px] md:top-[88px] z-40">
+        <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4">
+                <span class="text-slate-600 font-medium text-sm md:text-base">Location:</span>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="filterLocation('all')"
+                        class="location-btn active px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-blue-950 text-white"
+                        data-location="all">
+                        All Locations
+                    </button>
+                    <button onclick="filterLocation('rooftop')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="rooftop">
+                        Rooftop
+                    </button>
+                    <button onclick="filterLocation('medina')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="medina">
+                        Medina
+                    </button>
+                    <button onclick="filterLocation('casa')"
+                        class="location-btn px-3 md:px-4 py-2 rounded-lg font-medium transition-all text-sm md:text-base bg-slate-100 text-slate-600"
+                        data-location="casa">
+                        Casa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 md:px-6 py-6 md:py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <!-- Pending Orders -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-yellow-100 text-yellow-800 px-2 md:px-3 py-1 rounded-lg text-base md:text-lg">
+                            <i class="fa-solid fa-clock"></i> Pending
+                        </span>
+                        <span id="pending-count" class="text-slate-400 text-base md:text-lg">0</span>
+                    </h2>
+                </div>
+                <div id="pending-orders" class="space-y-4">
+                    <!-- Orders will be injected here -->
+                </div>
+            </div>
+
+            <!-- Preparing Orders -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <span class="bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg text-base md:text-lg">
+                            <i class="fa-solid fa-fire-burner"></i> Preparing
+                        </span>
+                        <span id="preparing-count" class="text-slate-400 text-base md:text-lg">0</span>
+                    </h2>
+                </div>
+                <div id="preparing-orders" class="space-y-4">
+                    <!-- Orders will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Orders (Collapsible) -->
+        <div class="mt-8">
+            <button onclick="toggleCompleted()"
+                class="w-full bg-white rounded-xl p-4 shadow-sm border border-slate-200 hover:shadow-md transition-all flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-base font-bold">
+                        <i class="fa-solid fa-check-double"></i> Completed
+                    </span>
+                    <span id="completed-count" class="text-slate-400 text-lg">0</span>
+                </div>
+                <i id="completed-icon" class="fa-solid fa-chevron-down text-slate-400"></i>
+            </button>
+            <div id="completed-orders" class="hidden mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Completed orders will be injected here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-20 hidden">
+            <div class="bg-white rounded-3xl p-12 max-w-md mx-auto shadow-sm">
+                <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-utensils text-3xl text-slate-400"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">No Active Orders</h3>
+                <p class="text-slate-500">New orders will appear here automatically</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, onSnapshot, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
+            authDomain: "fishburger-system.firebaseapp.com",
+            projectId: "fishburger-system",
+            storageBucket: "fishburger-system.firebasestorage.app",
+            messagingSenderId: "1011829893886",
+            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
+            measurementId: "G-LHF8XPTL3G"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let currentLocation = 'all';
+        let unsubscribe = null;
+        let unsubscribeCompleted = null;
+
+        // Filter by location
+        window.filterLocation = function (location) {
+            currentLocation = location;
+
+            // Update button states
+            document.querySelectorAll('.location-btn').forEach(btn => {
+                if (btn.dataset.location === location) {
+                    btn.classList.add('active', 'bg-blue-950', 'text-white');
+                    btn.classList.remove('bg-slate-100', 'text-slate-600');
+                } else {
+                    btn.classList.remove('active', 'bg-blue-950', 'text-white');
+                    btn.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            // Restart listeners with new filter
+            listenToOrders();
+            listenToCompletedOrders();
+        };
+
+        // Listen to real-time orders
+        function listenToOrders() {
+            // Unsubscribe from previous listener
+            if (unsubscribe) {
+                unsubscribe();
+            }
+
+            // Build query
+            let q;
+            if (currentLocation === 'all') {
+                q = query(
+                    collection(db, 'orders'),
+                    where('status', 'in', ['pending', 'preparing'])
+                );
+            } else {
+                q = query(
+                    collection(db, 'orders'),
+                    where('location', '==', currentLocation),
+                    where('status', 'in', ['pending', 'preparing'])
+                );
+            }
+
+            // Listen to changes
+            unsubscribe = onSnapshot(q, (snapshot) => {
+                const orders = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                displayOrders(orders);
+
+                // Log changes for debugging
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'added') {
+                        console.log('New order:', change.doc.data());
+                    }
+                    if (change.type === 'modified') {
+                        console.log('Modified order:', change.doc.data());
+                    }
+                    if (change.type === 'removed') {
+                        console.log('Removed order:', change.doc.data());
+                    }
+                });
+            }, (error) => {
+                console.error('Error listening to orders:', error);
+            });
+        }
+
+        // Listen to completed orders
+        function listenToCompletedOrders() {
+            // Unsubscribe from previous listener
+            if (unsubscribeCompleted) {
+                unsubscribeCompleted();
+            }
+
+            // Build query for completed orders (last 20)
+            let q;
+            if (currentLocation === 'all') {
+                q = query(
+                    collection(db, 'orders'),
+                    where('status', '==', 'completed')
+                );
+            } else {
+                q = query(
+                    collection(db, 'orders'),
+                    where('location', '==', currentLocation),
+                    where('status', '==', 'completed')
+                );
+            }
+
+            // Listen to changes
+            unsubscribeCompleted = onSnapshot(q, (snapshot) => {
+                const completedOrders = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                displayCompletedOrders(completedOrders);
+            }, (error) => {
+                console.error('Error listening to completed orders:', error);
+            });
+        }
+
+        // Display completed orders
+        function displayCompletedOrders(orders) {
+            document.getElementById('completed-count').textContent = orders.length;
+
+            const completedContainer = document.getElementById('completed-orders');
+            if (orders.length === 0) {
+                completedContainer.innerHTML = '<div class="col-span-full bg-white rounded-xl p-6 text-center text-slate-400">No completed orders</div>';
+            } else {
+                completedContainer.innerHTML = orders.map(order => createCompletedCard(order)).join('');
+            }
+        }
+
+        // Create completed order card (compact version)
+        function createCompletedCard(order) {
+            let time;
+            if (order.timestamp && order.timestamp.toDate) {
+                time = order.timestamp.toDate().toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.timestamp) {
+                time = new Date(order.timestamp).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.createdAt) {
+                time = new Date(order.createdAt).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                time = 'N/A';
+            }
+
+            const locationColors = {
+                rooftop: 'bg-purple-100 text-purple-800',
+                medina: 'bg-green-100 text-green-800',
+                casa: 'bg-orange-100 text-orange-800'
+            };
+
+            return `
+                <div class="order-card bg-white rounded-lg shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1">
+                            <div class="font-bold text-slate-800">${order.customer?.name || 'Unknown'}</div>
+                            <div class="text-xs text-slate-500">${order.customer?.phone || 'No phone'}</div>
+                            <div class="text-xs text-slate-500">${time}</div>
+                        </div>
+                        <span class="${locationColors[order.location] || 'bg-slate-100 text-slate-800'} px-2 py-1 rounded text-xs font-bold uppercase">
+                            ${order.location || 'unknown'}
+                        </span>
+                    </div>
+                    <div class="text-sm text-slate-600 mb-2">
+                        ${order.items?.map(item => item.name).join(', ') || 'No items'}
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-green-600 font-medium">
+                            <i class="fa-solid fa-check-circle"></i> Delivered
+                        </span>
+                        <span class="font-bold text-slate-800">${order.total} DH</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle completed orders visibility
+        window.toggleCompleted = function () {
+            const container = document.getElementById('completed-orders');
+            const icon = document.getElementById('completed-icon');
+
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                container.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        // Display orders
+        function displayOrders(orders) {
+            const pendingOrders = orders.filter(o => o.status === 'pending');
+            const preparingOrders = orders.filter(o => o.status === 'preparing');
+
+            // Update counts
+            document.getElementById('pending-count').textContent = pendingOrders.length;
+            document.getElementById('preparing-count').textContent = preparingOrders.length;
+            document.getElementById('total-count').textContent = orders.length;
+
+            // Display pending orders
+            const pendingContainer = document.getElementById('pending-orders');
+            if (pendingOrders.length === 0) {
+                pendingContainer.innerHTML = '<div class="bg-white rounded-xl p-6 text-center text-slate-400">No pending orders</div>';
+            } else {
+                pendingContainer.innerHTML = pendingOrders.map(order => createOrderCard(order)).join('');
+            }
+
+            // Display preparing orders
+            const preparingContainer = document.getElementById('preparing-orders');
+            if (preparingOrders.length === 0) {
+                preparingContainer.innerHTML = '<div class="bg-white rounded-xl p-6 text-center text-slate-400">No orders being prepared</div>';
+            } else {
+                preparingContainer.innerHTML = preparingOrders.map(order => createOrderCard(order)).join('');
+            }
+
+            // Show/hide empty state
+            const emptyState = document.getElementById('empty-state');
+            if (orders.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Generate QR codes for preparing orders
+            setTimeout(() => generateQRCodes(), 100);
+        }
+
+        // Create order card HTML
+        function createOrderCard(order) {
+            // Handle timestamp (could be Firestore Timestamp or ISO string)
+            let time;
+            if (order.timestamp && order.timestamp.toDate) {
+                time = order.timestamp.toDate().toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.timestamp) {
+                time = new Date(order.timestamp).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else if (order.createdAt) {
+                time = new Date(order.createdAt).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } else {
+                time = 'N/A';
+            }
+
+            const locationColors = {
+                rooftop: 'bg-purple-100 text-purple-800',
+                medina: 'bg-green-100 text-green-800',
+                casa: 'bg-orange-100 text-orange-800'
+            };
+
+            const statusActions = order.status === 'pending'
+                ? `<button onclick="updateStatus('${order.id}', 'preparing')" 
+                       class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors">
+                       <i class="fa-solid fa-fire-burner"></i> Start Preparing
+                   </button>`
+                : `<div class="space-y-3">
+                       <button onclick="updateStatus('${order.id}', 'ready')" 
+                           class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">
+                           <i class="fa-solid fa-check"></i> Mark as Ready
+                       </button>
+                       <div class="bg-slate-50 rounded-xl p-4 border-2 border-dashed border-slate-300">
+                           <div class="text-center mb-3">
+                               <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                                   <i class="fa-solid fa-qrcode mr-1"></i> Delivery QR Code
+                               </div>
+                               <div class="text-[10px] text-slate-400">Driver scans to start delivery</div>
+                           </div>
+                           <div id="qr-${order.id}" class="flex justify-center"></div>
+                       </div>
+                   </div>`;
+
+            return `
+                <div class="order-card bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow" data-order-id="${order.id}" data-order-number="${order.orderNumber}">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="text-xs text-slate-500 mb-1">Order #${String(order.orderNumber || 0).padStart(3, '0')}</div>
+                                <div class="font-bold text-lg text-slate-800">${order.customer?.name || 'Unknown'}</div>
+                                <div class="text-sm font-medium text-blue-600 mb-1">
+                                    <i class="fa-solid fa-phone mr-1"></i>${order.customer?.phone || 'No phone'}
+                                </div>
+                                <div class="text-sm text-slate-500">${time}</div>
+                            </div>
+                            <span class="${locationColors[order.location] || 'bg-slate-100 text-slate-800'} px-3 py-1 rounded-full text-xs font-bold uppercase">
+                                ${order.location || 'unknown'}
+                            </span>
+                        </div>
+
+                        <div class="bg-blue-50 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-blue-500 font-bold mb-1 uppercase tracking-wider">Delivery Address</div>
+                            <div class="text-sm text-slate-800 font-medium">${order.customer?.address || 'No address provided'}</div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            ${order.items?.map(item => `
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-700">${item.name} ${item.quantity > 1 ? `x${item.quantity}` : ''}</span>
+                                    <span class="text-slate-500">${item.priceStr || item.price + ' DH'}</span>
+                                </div>
+                            `).join('') || '<div class="text-slate-400 text-sm">No items</div>'}
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-4 mb-4">
+                            <div class="flex justify-between items-center font-bold">
+                                <span class="text-slate-600">Total</span>
+                                <span class="text-blue-950 text-lg">${order.total} DH</span>
+                            </div>
+                        </div>
+
+                        ${statusActions}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Generate QR codes for preparing orders
+        function generateQRCodes() {
+            document.querySelectorAll('[data-order-id]').forEach(card => {
+                const orderId = card.dataset.orderId;
+                const orderNumber = card.dataset.orderNumber;
+                const qrContainer = card.querySelector(`#qr-${orderId}`);
+
+                if (qrContainer && !qrContainer.hasChildNodes()) {
+                    // Create QR code link to delivery action page
+                    const actionUrl = `${window.location.origin}/frontend/delivery-action.html?id=${orderId}&order=${orderNumber}`;
+
+                    QRCode.toCanvas(document.createElement('canvas'), actionUrl, {
+                        width: 120,
+                        margin: 1,
+                        color: {
+                            dark: '#1e3a8a',
+                            light: '#f8fafc'
+                        }
+                    }, (error, canvas) => {
+                        if (error) {
+                            console.error('QR Code error:', error);
+                            return;
+                        }
+                        canvas.style.borderRadius = '8px';
+                        qrContainer.appendChild(canvas);
+                    });
+                }
+            });
+        }
+
+        // Update order status
+        window.updateStatus = async function (orderId, newStatus) {
+            try {
+                const orderRef = doc(db, 'orders', orderId);
+                await updateDoc(orderRef, {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                console.log(`Order ${orderId} updated to ${newStatus}`);
+                // The UI will update automatically via the listener!
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating order status: ' + error.message);
+            }
+        };
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (unsubscribe) {
+                unsubscribe();
+            }
+            if (unsubscribeCompleted) {
+                unsubscribeCompleted();
+            }
+        });
+
+        // Start listening on page load
+        listenToOrders();
+        listenToCompletedOrders();
+    </script>
+</body>
+
+</html>

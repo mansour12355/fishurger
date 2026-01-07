@@ -1,0 +1,354 @@
+{
+  "orders": [
+    {
+      "id": "ord-001",
+      "items": [
+        {
+          "name": "Classic Fish Burger",
+          "price": 140,
+          "priceStr": "140 DH"
+        },
+        {
+          "name": "French Fries",
+          "price": 25,
+          "priceStr": "25 DH"
+        }
+      ],
+      "total": 165,
+      "customer": {
+        "name": "Ahmed Hassan",
+        "address": "12 Rue Mohammed V, Essaouira"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-15T08:30:00.000Z",
+      "updatedAt": "2025-12-15T09:15:00.000Z"
+    },
+    {
+      "id": "ord-002",
+      "items": [
+        {
+          "name": "Spicy Tuna Burger",
+          "price": 160,
+          "priceStr": "160 DH"
+        }
+      ],
+      "total": 160,
+      "customer": {
+        "name": "Fatima Zahra",
+        "address": "Avenue Oqba Ibn Nafiaa"
+      },
+      "location": "medina",
+      "status": "completed",
+      "timestamp": "2025-12-15T10:00:00.000Z",
+      "updatedAt": "2025-12-15T10:45:00.000Z"
+    },
+    {
+      "id": "ord-003",
+      "items": [
+        {
+          "name": "Grilled Salmon Burger",
+          "price": 180,
+          "priceStr": "180 DH"
+        },
+        {
+          "name": "Coleslaw",
+          "price": 20,
+          "priceStr": "20 DH"
+        }
+      ],
+      "total": 200,
+      "customer": {
+        "name": "Youssef Alami",
+        "address": "Quartier des Dunes"
+      },
+      "location": "casa",
+      "status": "completed",
+      "timestamp": "2025-12-15T11:15:00.000Z",
+      "updatedAt": "2025-12-15T12:00:00.000Z"
+    },
+    {
+      "id": "ord-004",
+      "items": [
+        {
+          "name": "Classic Fish Burger",
+          "price": 140,
+          "priceStr": "140 DH"
+        }
+      ],
+      "total": 140,
+      "customer": {
+        "name": "Sara Bennani",
+        "address": "Rue de la Skala"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-15T23:30:00.000Z",
+      "updatedAt": "2025-12-16T15:01:43.265Z"
+    },
+    {
+      "id": "ord-005",
+      "items": [
+        {
+          "name": "Shrimp Burger Deluxe",
+          "price": 190,
+          "priceStr": "190 DH"
+        },
+        {
+          "name": "Onion Rings",
+          "price": 30,
+          "priceStr": "30 DH"
+        }
+      ],
+      "total": 220,
+      "customer": {
+        "name": "Karim Idrissi",
+        "address": "Boulevard Mohammed VI"
+      },
+      "location": "medina",
+      "status": "completed",
+      "timestamp": "2025-12-15T13:00:00.000Z",
+      "updatedAt": "2025-12-15T13:45:00.000Z"
+    },
+    {
+      "id": "ord-006",
+      "items": [
+        {
+          "name": "Fish & Chips",
+          "price": 140,
+          "priceStr": "140 DH"
+        }
+      ],
+      "total": 140,
+      "customer": {
+        "name": "Nadia Tazi",
+        "address": "Place Moulay Hassan"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-15T14:15:00.000Z",
+      "updatedAt": "2025-12-15T15:00:00.000Z"
+    },
+    {
+      "id": "ord-007",
+      "items": [
+        {
+          "name": "Classic Fish Burger",
+          "price": 140,
+          "priceStr": "140 DH"
+        },
+        {
+          "name": "Soft Drink",
+          "price": 15,
+          "priceStr": "15 DH"
+        }
+      ],
+      "total": 155,
+      "customer": {
+        "name": "Omar Fassi",
+        "address": "Rue Laalouj"
+      },
+      "location": "casa",
+      "status": "completed",
+      "timestamp": "2025-12-15T23:45:00.000Z",
+      "updatedAt": "2025-12-16T15:01:45.097Z"
+    },
+    {
+      "id": "ord-008",
+      "items": [
+        {
+          "name": "Spicy Tuna Burger",
+          "price": 160,
+          "priceStr": "160 DH"
+        },
+        {
+          "name": "French Fries",
+          "price": 25,
+          "priceStr": "25 DH"
+        }
+      ],
+      "total": 185,
+      "customer": {
+        "name": "Leila Mansouri",
+        "address": "Quartier Diabat"
+      },
+      "location": "medina",
+      "status": "completed",
+      "timestamp": "2025-12-15T16:00:00.000Z",
+      "updatedAt": "2025-12-15T16:45:00.000Z"
+    },
+    {
+      "id": "ord-009",
+      "items": [
+        {
+          "name": "Grilled Salmon Burger",
+          "price": 180,
+          "priceStr": "180 DH"
+        }
+      ],
+      "total": 180,
+      "customer": {
+        "name": "Hassan Berrada",
+        "address": "Avenue de l'Istiqlal"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-15T23:50:00.000Z",
+      "updatedAt": "2025-12-16T00:20:24.556Z"
+    },
+    {
+      "id": "ord-010",
+      "items": [
+        {
+          "name": "Classic Fish Burger",
+          "price": 140,
+          "priceStr": "140 DH"
+        },
+        {
+          "name": "Coleslaw",
+          "price": 20,
+          "priceStr": "20 DH"
+        }
+      ],
+      "total": 160,
+      "customer": {
+        "name": "Amina Chakir",
+        "address": "Rue Sidi Mohammed Ben Abdallah"
+      },
+      "location": "casa",
+      "status": "completed",
+      "timestamp": "2025-12-15T17:00:00.000Z",
+      "updatedAt": "2025-12-15T17:30:00.000Z"
+    },
+    {
+      "id": "ord-011",
+      "items": [
+        {
+          "name": "Shrimp Burger Deluxe",
+          "price": 190,
+          "priceStr": "190 DH"
+        }
+      ],
+      "total": 190,
+      "customer": {
+        "name": "Rachid El Amrani",
+        "address": "Quartier Industriel"
+      },
+      "location": "medina",
+      "status": "completed",
+      "timestamp": "2025-12-16T00:00:00.000Z",
+      "updatedAt": "2025-12-16T00:20:27.504Z"
+    },
+    {
+      "id": "ord-012",
+      "items": [
+        {
+          "name": "Fish & Chips",
+          "price": 140,
+          "priceStr": "140 DH"
+        },
+        {
+          "name": "Soft Drink",
+          "price": 15,
+          "priceStr": "15 DH"
+        }
+      ],
+      "total": 155,
+      "customer": {
+        "name": "Zineb Lahlou",
+        "address": "Rue du Caire"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-15T18:00:00.000Z",
+      "updatedAt": "2025-12-15T18:30:00.000Z"
+    },
+    {
+      "id": "ord-013",
+      "items": [
+        {
+          "name": "Spicy Tuna Burger",
+          "price": 160,
+          "priceStr": "160 DH"
+        },
+        {
+          "name": "Onion Rings",
+          "price": 30,
+          "priceStr": "30 DH"
+        }
+      ],
+      "total": 190,
+      "customer": {
+        "name": "Mehdi Benkirane",
+        "address": "Avenue Zerktouni"
+      },
+      "location": "casa",
+      "status": "completed",
+      "timestamp": "2025-12-15T19:00:00.000Z",
+      "updatedAt": "2025-12-15T19:30:00.000Z"
+    },
+    {
+      "id": "ord-014",
+      "items": [
+        {
+          "name": "Classic Fish Burger",
+          "price": 140,
+          "priceStr": "140 DH"
+        }
+      ],
+      "total": 140,
+      "customer": {
+        "name": "Salma Tounsi",
+        "address": "Rue Touahen"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-16T00:10:00.000Z",
+      "updatedAt": "2025-12-16T15:01:47.182Z"
+    },
+    {
+      "id": "ord-015",
+      "items": [
+        {
+          "name": "Grilled Salmon Burger",
+          "price": 180,
+          "priceStr": "180 DH"
+        },
+        {
+          "name": "French Fries",
+          "price": 25,
+          "priceStr": "25 DH"
+        }
+      ],
+      "total": 205,
+      "customer": {
+        "name": "Khalid Benjelloun",
+        "address": "Boulevard Hassan II"
+      },
+      "location": "medina",
+      "status": "completed",
+      "timestamp": "2025-12-15T20:00:00.000Z",
+      "updatedAt": "2025-12-15T20:30:00.000Z"
+    },
+    {
+      "id": "351bc884-c573-4aaa-a861-7a59aa4371ac",
+      "items": [
+        {
+          "name": "Crispy Fish Burger",
+          "price": 95,
+          "priceStr": "95 DH",
+          "imgUrl": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=150&q=80"
+        }
+      ],
+      "total": 95,
+      "customer": {
+        "name": "mansoor",
+        "address": "moga"
+      },
+      "location": "rooftop",
+      "status": "completed",
+      "timestamp": "2025-12-16T14:53:44.249Z",
+      "updatedAt": "2025-12-16T15:01:49.386Z"
+    }
+  ]
+}

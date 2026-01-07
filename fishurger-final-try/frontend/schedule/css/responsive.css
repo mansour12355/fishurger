@@ -1,0 +1,375 @@
+/* ===================================
+   DevSync - Responsive Styles
+   Extracted from main styles.css
+   =================================== */
+
+/* Tablet */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tasks-board {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Small Tablet / Large Phone */
+@media (max-width: 992px) {
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: var(--header-height);
+        bottom: 0;
+        width: 260px;
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal);
+        z-index: 1000;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: var(--spacing-md);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        margin-right: var(--spacing-sm);
+    }
+
+    /* Fix Mobile Layout */
+    .main-content {
+        padding: var(--spacing-sm);
+    }
+
+    .menu-editor .card {
+        padding: var(--spacing-md);
+    }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .menu-card {
+        width: 100%;
+        margin: 0;
+    }
+
+    .mobile-menu-btn svg {
+        width: 22px;
+        height: 22px;
+        color: var(--text-primary);
+    }
+}
+
+/* Phone */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 var(--spacing-sm);
+        height: 60px;
+    }
+
+    :root {
+        --header-height: 60px;
+    }
+
+    .logo-text {
+        font-size: 1.2rem;
+    }
+
+    .logo-icon-wrapper svg,
+    .logo-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* Hide role indicator text on small screens */
+    .role-display .role-name {
+        display: none;
+    }
+
+    .role-display {
+        padding: var(--spacing-sm);
+    }
+
+    /* User profile compact */
+    .user-profile {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    /* Stats grid single column */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .stat-card {
+        padding: var(--spacing-md);
+    }
+
+    .stat-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .stat-card-value {
+        font-size: 1.5rem;
+    }
+
+    /* Tasks board single column */
+    .tasks-board {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .task-column {
+        min-height: auto;
+    }
+
+    /* View header stack */
+    .view-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: stretch;
+    }
+
+    .view-title h1 {
+        font-size: 1.5rem;
+    }
+
+    .view-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+
+    .filter-group {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Sticky Horizontal Menu Categories */
+    .menu-controls {
+        position: sticky !important;
+        top: var(--header-height) !important;
+        background: var(--bg-card) !important;
+        z-index: 100 !important;
+        padding-top: var(--spacing-md) !important;
+        margin-bottom: var(--spacing-lg) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+    }
+
+    .menu-filters {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+        gap: 8px !important;
+        padding-bottom: 8px !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .menu-filters::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .menu-filter {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    /* Calendar responsive */
+    .calendar-nav {
+        gap: var(--spacing-sm);
+    }
+
+    .current-month {
+        font-size: 1rem;
+    }
+
+    .calendar-grid {
+        font-size: 0.75rem;
+    }
+
+    .calendar-day {
+        min-height: 50px;
+        padding: 2px;
+    }
+
+    .day-number {
+        font-size: 0.8rem;
+    }
+
+    .day-task {
+        font-size: 0.6rem;
+        padding: 2px 4px;
+    }
+
+    /* Messages responsive */
+    .messages-container {
+        height: calc(100vh - 200px);
+    }
+
+    .message {
+        max-width: 85%;
+    }
+
+    .message-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    .message-input-container {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .message-input {
+        width: 100%;
+    }
+
+    #sendMessageBtn {
+        width: 100%;
+    }
+
+    /* Modal responsive */
+    .modal-content {
+        margin: var(--spacing-md);
+        padding: var(--spacing-lg);
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Cards compact */
+    .card {
+        padding: var(--spacing-md);
+    }
+
+    .card-header h2 {
+        font-size: 1rem;
+    }
+
+    /* Task items compact */
+    .task-item {
+        padding: var(--spacing-sm);
+    }
+
+    .task-title {
+        font-size: 0.9rem;
+    }
+
+    .task-meta {
+        font-size: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* Notifications */
+    .notification-btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .logout-btn {
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 400px) {
+    .header-left {
+        flex: 1;
+    }
+
+    .logo-text {
+        font-size: 1rem;
+    }
+
+    .header-right {
+        gap: var(--spacing-xs);
+    }
+
+    .notification-btn,
+    .logout-btn {
+        width: 36px;
+        height: 36px;
+        padding: var(--spacing-xs);
+    }
+
+    .view-title h1 {
+        font-size: 1.25rem;
+    }
+
+    .stat-card-value {
+        font-size: 1.25rem;
+    }
+
+    .board-task {
+        padding: var(--spacing-sm);
+    }
+
+    .board-task-title {
+        font-size: 0.85rem;
+    }
+}

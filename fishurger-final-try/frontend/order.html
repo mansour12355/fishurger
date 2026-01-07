@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Order Online - Fish Burger Essaouira</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: '#fff5f0',
+                            100: '#ffebe0',
+                            200: '#ffd4bf',
+                            300: '#ffb899',
+                            400: '#ff7733',
+                            500: '#FF4500',
+                            600: '#FF4500',
+                            700: '#cc3700',
+                            800: '#992900',
+                            900: '#661c00',
+                            950: '#330e00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Fonts: Playfair Display (Headings) & Outfit (Body) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Global Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+            transition: background 0.2s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Hide Scrollbar for Categories but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+
+
+        /* Fade in animation */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen pb-24 lg:pb-0">
+
+    <!-- Redirection & Location Logic -->
+    <script>
+            (function () {
+                const storedLocation = localStorage.getItem('selectedLocation');
+                if (!storedLocation) {
+                    window.location.href = 'index.html';
+                }
+            })();
+    </script>
+
+    <header class="bg-[#1e3a8a] text-white py-4 lg:py-6 sticky top-0 z-40 shadow-xl">
+        <div class="container mx-auto px-4 lg:px-6">
+            <div class="flex justify-between items-center">
+                <a href="main.html" class="flex items-center gap-3 group">
+                    <div
+                        class="bg-red-600 text-white w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center text-lg lg:text-xl shadow-lg">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <div class="leading-tight">
+                        <span class="block font-bold text-lg lg:text-xl tracking-wider uppercase">FishBurger</span>
+                        <span
+                            class="block text-[10px] lg:text-xs font-medium tracking-widest opacity-80">ESSAOUIRA</span>
+                    </div>
+                </a>
+
+                <div class="hidden lg:flex items-center gap-4">
+                    <div
+                        class="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full flex items-center gap-2">
+                        <i class="fa-solid fa-shopping-cart text-red-400"></i>
+                        <span id="header-cart-count" class="font-bold">0</span>
+                        <span class="text-sm">items</span>
+                    </div>
+                </div>
+
+                <button onclick="scrollToCart()" class="lg:hidden relative p-2">
+                    <i class="fa-solid fa-shopping-bag text-2xl"></i>
+                    <span id="mobile-header-badge"
+                        class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full hidden border-2 border-[#1e3a8a]">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 lg:px-6 py-8 lg:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-2">
+                <div class="mb-6 lg:mb-8">
+                    <h1 class="text-3xl lg:text-5xl font-bold text-blue-950 mb-2">Order Online</h1>
+                    <p class="text-slate-600 text-base lg:text-lg">Select your favorites and place your order</p>
+                </div>
+
+                <div class="flex gap-3 mb-6 lg:mb-8 overflow-x-auto pb-2 no-scrollbar touch-pan-x">
+                    <button onclick="filterMenu('burgers')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-blue-950 text-white border-blue-950 shrink-0">Burgers</button>
+                    <button onclick="filterMenu('sides')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-transparent text-slate-600 border-slate-300 shrink-0">Sides</button>
+                    <button onclick="filterMenu('tapas')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-transparent text-slate-600 border-slate-300 shrink-0">Tapas</button>
+                    <button onclick="filterMenu('globe')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-transparent text-slate-600 border-slate-300 shrink-0">Global</button>
+                    <button onclick="filterMenu('desserts')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-transparent text-slate-600 border-slate-300 shrink-0">Desserts</button>
+                    <button onclick="filterMenu('drinks')"
+                        class="menu-tab px-5 py-2.5 rounded-full font-bold text-sm uppercase tracking-wide transition-all border whitespace-nowrap bg-transparent text-slate-600 border-slate-300 shrink-0">Drinks</button>
+                </div>
+
+                <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                </div>
+            </div>
+
+            <div id="cart-section" class="lg:col-span-1 mt-8 lg:mt-0">
+                <div class="lg:sticky lg:top-28">
+                    <div class="bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden">
+                        <div class="bg-[#1e3a8a] text-white p-6 lg:p-8 relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl">
+                            </div>
+                            <h3
+                                class="text-2xl lg:text-3xl font-bold serif flex justify-between items-center relative z-10">
+                                Your Order
+                                <span id="cart-count-badge"
+                                    class="bg-[#ef4444] text-white text-base font-extrabold w-8 h-8 flex items-center justify-center rounded-full hidden shadow-lg border-2 border-white/20">0</span>
+                            </h3>
+                        </div>
+
+                        <div class="p-6 lg:p-8">
+                            <div id="empty-cart-msg" class="text-center py-8 lg:py-12 text-slate-400">
+                                <div
+                                    class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100 shadow-inner">
+                                    <i class="fa-solid fa-basket-shopping text-3xl text-slate-200"></i>
+                                </div>
+                                <p class="text-lg font-bold text-slate-400">Your basket is empty</p>
+                                <p class="text-sm mt-1 opacity-60">Add some delicious burgers!</p>
+                            </div>
+
+                            <div id="cart-items"
+                                class="space-y-3 mb-6 max-h-[400px] overflow-y-auto pr-1 hidden custom-scrollbar">
+                            </div>
+
+                            <div id="cart-footer" class="hidden">
+                                <div class="mb-6 space-y-2">
+                                    <div class="flex gap-2">
+                                        <input type="text" id="promo-code" placeholder="PROMO CODE"
+                                            class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-600 font-bold text-sm uppercase">
+                                        <button onclick="applyPromoCode()"
+                                            class="px-5 py-3 bg-blue-900 text-white rounded-xl font-bold text-xs hover:bg-blue-800">APPLY</button>
+                                    </div>
+                                    <div id="promo-msg" class="text-[10px] font-bold pl-1 hidden italic"></div>
+                                </div>
+
+                                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100 mb-6">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-slate-500 font-bold text-xs uppercase">Total</span>
+                                        <span id="cart-total" class="text-3xl font-black text-[#1e3a8a]">0 DH</span>
+                                    </div>
+                                    <div id="discount-display"
+                                        class="hidden flex justify-between items-center pt-2 border-t border-slate-200 mt-2">
+                                        <span class="text-green-600 font-bold text-xs">Discount</span>
+                                        <span id="discount-amount" class="text-green-600 font-extrabold text-sm">-0
+                                            DH</span>
+                                    </div>
+                                </div>
+
+                                <button onclick="checkout()"
+                                    class="w-full bg-[#16a34a] active:bg-[#15803d] text-white font-black py-4 rounded-xl shadow-lg shadow-green-600/20 flex items-center justify-center gap-3 transition-transform active:scale-95">
+                                    <span class="text-lg">Place Order</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Custom Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <!-- Modal Panel -->
+                <div
+                    class="relative transform overflow-hidden rounded-2xl bg-white border border-slate-200 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                    <div class="px-4 pb-4 pt-5 sm:p-8">
+                        <div>
+                            <div
+                                class="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-orange-100 sm:h-12 sm:w-12 border border-orange-200 shadow-inner">
+                                <i class="fa-solid fa-fish text-2xl text-orange-500"></i>
+                            </div>
+                            <div class="mt-3 text-center w-full">
+                                <h3 class="text-2xl font-black leading-tight text-slate-800 font-serif mb-1"
+                                    id="modal-title">
+                                    Complete Order</h3>
+                                <p class="text-xs text-slate-500 font-medium mb-8">Please provide your details below.
+                                </p>
+                                <div class="space-y-5 text-left">
+                                    <div>
+                                        <label for="customer-name-input"
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Full
+                                            Name</label>
+                                        <div class="relative group">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i
+                                                    class="fa-regular fa-user text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+                                            </div>
+                                            <input type="text" id="customer-name-input"
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-50 transition-all font-semibold"
+                                                placeholder="John Doe">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="customer-phone-input"
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Phone
+                                            Number</label>
+                                        <div class="relative group">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i
+                                                    class="fa-solid fa-phone text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+                                            </div>
+                                            <input type="tel" id="customer-phone-input"
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-50 transition-all font-semibold"
+                                                placeholder="+212 600 000 000">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="customer-address-input"
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Delivery
+                                            Address</label>
+                                        <div class="relative group">
+                                            <div class="absolute top-4 left-4 pointer-events-none">
+                                                <i
+                                                    class="fa-solid fa-map-pin text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+                                            </div>
+                                            <textarea id="customer-address-input" rows="2"
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-50 transition-all font-semibold resize-none leading-relaxed"
+                                                placeholder="Street address, apartment, etc."></textarea>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="customer-location-input"
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Location</label>
+                                        <div class="relative group">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                                <i
+                                                    class="fa-solid fa-location-dot text-slate-400 group-focus-within:text-orange-500 transition-colors"></i>
+                                            </div>
+                                            <select id="customer-location-input" disabled
+                                                class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-100 transition-all font-semibold appearance-none cursor-not-allowed opacity-75">
+                                                <option value="rooftop">Rooftop</option>
+                                                <option value="medina">Medina</option>
+                                                <option value="casa">Casa</option>
+                                            </select>
+                                            <div
+                                                class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                                <i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-black text-orange-500 uppercase tracking-widest mb-2 ml-1">Payment
+                                            Method</label>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="card" checked
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-credit-card text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">Card</span>
+                                                </div>
+                                            </label>
+                                            <label class="cursor-pointer group">
+                                                <input type="radio" name="payment-method" value="domicile"
+                                                    class="hidden peer">
+                                                <div
+                                                    class="flex items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 bg-slate-50 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
+                                                    <i
+                                                        class="fa-solid fa-house text-slate-400 group-hover:text-orange-500 peer-checked:text-orange-500"></i>
+                                                    <span
+                                                        class="text-sm font-semibold text-slate-700 peer-checked:text-orange-700">A
+                                                        domicile</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Stripe Elements Section (Conditional) -->
+                                    <div id="stripe-card-section" class="space-y-4 pt-2">
+                                        <div>
+                                            <div class="flex justify-between items-center mb-2 ml-1">
+                                                <label
+                                                    class="block text-[10px] font-black text-orange-500 uppercase tracking-widest">Card
+                                                    Details</label>
+                                                <div class="flex gap-2 items-center opacity-80">
+                                                    <i class="fa-brands fa-cc-visa text-lg text-blue-600"></i>
+                                                    <i class="fa-brands fa-cc-mastercard text-lg text-red-600"></i>
+                                                    <span
+                                                        class="text-[9px] font-black bg-blue-900 text-white px-1.5 py-0.5 rounded-sm tracking-tighter leading-none">CMI</span>
+                                                    <i class="fa-brands fa-cc-stripe text-lg text-[#635bff] ml-1"></i>
+                                                </div>
+                                            </div>
+                                            <!-- Stripe Element Container -->
+                                            <div id="card-element"
+                                                class="w-full rounded-xl border border-slate-200 py-4 px-4 bg-white shadow-sm transition-all focus-within:ring-2 focus-within:ring-orange-500/50 focus-within:border-orange-500">
+                                                <!-- A Stripe Element will be inserted here. -->
+                                            </div>
+                                            <!-- Used to display form errors. -->
+                                            <div id="card-errors" role="alert"
+                                                class="mt-2 text-xs text-red-600 font-medium ml-1"></div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-center gap-2 opacity-50 grayscale hover:grayscale-0 transition-all">
+                                            <span
+                                                class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Secure
+                                                Payment by</span>
+                                            <i class="fa-brands fa-stripe text-3xl"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-slate-50 px-6 py-4 sm:flex sm:flex-row-reverse rounded-b-2xl border-t border-slate-200">
+                        <button type="button" onclick="confirmOrder()"
+                            class="inline-flex w-full justify-center rounded-xl bg-gradient-to-r from-orange-600 to-orange-500 px-6 py-4 text-sm font-black text-white shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 hover:to-orange-600 sm:ml-3 sm:w-auto transition-all active:scale-95 uppercase tracking-widest">
+                            <i class="fa-solid fa-check mr-2"></i>
+                            Confirm
+                        </button>
+                        <button type="button" onclick="closeModal()"
+                            class="mt-3 inline-flex w-full justify-center rounded-xl bg-slate-200 px-6 py-4 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-300 sm:mt-0 sm:w-auto transition-all active:scale-95 uppercase tracking-widest">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[110] hidden" aria-labelledby="success-title" role="dialog"
+        aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900/75 backdrop-blur-sm transition-opacity" aria-hidden="true"></div>
+        <!-- Modal Content -->
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div
+                    class="relative transform overflow-hidden rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-white/20">
+                    <div class="px-6 pb-6 pt-8 sm:p-10 text-center">
+                        <!-- Success Icon -->
+                        <div
+                            class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/20 mb-6 border-4 border-white/30 shadow-xl">
+                            <i class="fa-solid fa-check text-4xl text-white"></i>
+                        </div>
+                        <!-- Order Number -->
+                        <div class="text-sm font-bold text-white/70 mb-2 tracking-wider uppercase">
+                            Order <span id="success-order-number">#0000</span>
+                        </div>
+                        <!-- Title -->
+                        <h3 class="text-3xl font-black leading-tight text-white font-serif mb-3" id="success-title">
+                            Order Confirmed!
+                        </h3>
+                        <!-- Message -->
+                        <div class="bg-white/10 rounded-2xl p-5 mb-6 backdrop-blur-sm border border-white/20">
+                            <p class="text-sm text-white/90 font-medium mb-4">Your order has been sent to the kitchen.
+                            </p>
+                            <div id="success-details" class="text-left space-y-2 text-sm">
+                                <!-- Details will be inserted here -->
+                            </div>
+                        </div>
+                        <!-- Track Order Button -->
+                        <a id="track-order-btn" href="track.html"
+                            class="w-full justify-center rounded-xl bg-white text-green-700 px-6 py-4 text-base font-black shadow-lg hover:bg-green-50 transition-all active:scale-95 uppercase tracking-widest flex items-center justify-center gap-2 mb-3">
+                            <i class="fa-solid fa-location-dot"></i>
+                            Track Your Order
+                        </a>
+                        <!-- Close Button -->
+                        <button type="button" onclick="closeSuccessModal()"
+                            class="w-full justify-center rounded-xl bg-white/20 text-white px-6 py-3 text-sm font-bold hover:bg-white/30 transition-all active:scale-95 uppercase tracking-widest border border-white/30">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, serverTimestamp, doc, runTransaction, getDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDH78fxDaNoqGAzyuPvuGMAoI09xlm8G_8",
+            authDomain: "schedulesfishburger.firebaseapp.com",
+            projectId: "schedulesfishburger",
+            storageBucket: "schedulesfishburger.firebasestorage.app",
+            messagingSenderId: "90025578074",
+            appId: "1:90025578074:web:a23dc45d6b4d1e2b0b5263",
+            measurementId: "G-02T4XQD19G"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- DATA ---
+        // --- DATA ---
+        let menuItems = {
+            burgers: [],
+            sides: [],
+            tapas: [],
+            globe: [],
+            desserts: [],
+            drinks: []
+        };
+
+        // Fetch menu from Firebase dynamically
+        async function fetchAndOrganizeMenu() {
+            try {
+                // Determine user's location (default to medina if not set, logic can be improved)
+                let selectedLocation = localStorage.getItem('selectedLocation');
+                if (!selectedLocation) {
+                    console.warn('No location selected, defaulting to medina for display');
+                    selectedLocation = 'medina';
+                }
+                selectedLocation = selectedLocation.toLowerCase();
+
+                const menuRef = collection(db, 'menu');
+                const snapshot = await getDocs(menuRef);
+
+                // Reset arrays
+                menuItems = { burgers: [], sides: [], tapas: [], globe: [], desserts: [], drinks: [] };
+
+                snapshot.forEach(doc => {
+                    const item = doc.data();
+
+                    // Availability Check
+                    // 1. Global Availability Check
+                    let isAvailable = item.available !== false;
+
+                    // 2. Branch Availability Check
+                    if (isAvailable) {
+                        // Construct field name (e.g., availableMedina, availableRooftop)
+                        const branchField = 'available' + selectedLocation.charAt(0).toUpperCase() + selectedLocation.slice(1);
+                        if (item[branchField] === false) {
+                            isAvailable = false;
+                        }
+                    }
+
+                    // 3. Add to category
+                    if (menuItems[item.category]) {
+                        // Format price for display
+                        const displayItem = {
+                            ...item,
+                            price: item.price + " DH",
+                            mini: item.mini ? item.mini + " DH" : undefined,
+                            soldOut: !isAvailable // Mark as sold out if not available
+                        };
+                        menuItems[item.category].push(displayItem);
+                    }
+                });
+
+                // Update UI after fetching
+                // Determine current active tab
+                let activeCategory = 'burgers'; // Default
+                tabs.forEach(tab => {
+                    if (tab.classList.contains('bg-blue-950')) {
+                        activeCategory = tab.dataset.category || tab.textContent.trim().toLowerCase();
+                        if (activeCategory === 'taste the globe') activeCategory = 'globe';
+                    }
+                });
+
+                // Force refresh of the current view
+                window.filterMenu(activeCategory);
+
+                console.log('Menu loaded for location:', selectedLocation);
+
+            } catch (error) {
+                console.error("Error fetching menu:", error);
+            }
+        }
+
+        // Load menu on startup
+        fetchAndOrganizeMenu();
+
+        let cart = [];
+        let discountPercent = 0;
+        let appliedCode = '';
+
+        // --- DOM ELEMENTS ---
+        const menuGrid = document.getElementById('menu-grid');
+        const tabs = document.querySelectorAll('.menu-tab');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartFooter = document.getElementById('cart-footer');
+        const emptyCartMsg = document.getElementById('empty-cart-msg');
+        const cartTotalDisplay = document.getElementById('cart-total');
+        const cartCountBadge = document.getElementById('cart-count-badge');
+        const headerCartCount = document.getElementById('header-cart-count');
+        const mobileHeaderBadge = document.getElementById('mobile-header-badge');
+
+        // --- FUNCTIONS ---
+        window.scrollToCart = function () {
+            const cartSection = document.getElementById('cart-section');
+            cartSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.filterMenu = function (category) {
+            tabs.forEach(tab => {
+                const tabText = tab.textContent.trim().toLowerCase();
+                if (tabText.includes(category) || (category === 'globe' && tabText === 'global')) {
+                    tab.classList.remove('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.add('bg-blue-950', 'text-white', 'border-blue-950');
+
+                    // Auto-scroll to center the active tab
+                    tab.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    });
+                } else {
+                    tab.classList.add('bg-transparent', 'text-slate-600', 'border-slate-300');
+                    tab.classList.remove('bg-blue-950', 'text-white', 'border-blue-950');
+                }
+            });
+
+            menuGrid.innerHTML = '';
+            const items = menuItems[category] || [];
+
+            items.forEach((item, index) => {
+                const el = document.createElement('div');
+                const isSoldOut = item.soldOut;
+
+                // Card CSS: Add grayscale/opacity if sold out
+                const baseClasses = 'bg-slate-50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col justify-between fade-enter hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative';
+                el.className = isSoldOut ? baseClasses + ' opacity-75 grayscale' : baseClasses;
+
+                // Build price display with mini option
+                const priceDisplay = item.mini
+                    ? `<div class="flex flex-col gap-1">
+                         <div class="flex items-center gap-2">
+                           <span class="text-xs text-slate-400 uppercase font-semibold">Burger:</span>
+                           <span class="text-lg font-bold text-orange-600">${item.price}</span>
+                         </div>
+                         <div class="flex items-center gap-2">
+                           <span class="text-xs text-slate-400 uppercase font-semibold">Mini:</span>
+                           <span class="text-lg font-bold text-blue-600">${item.mini}</span>
+                         </div>
+                       </div>`
+                    : `<span class="text-2xl font-bold text-orange-600 tracking-tight">${item.price}</span>`;
+
+                // Build buttons OR Sold Out message
+                let actionArea = '';
+
+                if (isSoldOut) {
+                    actionArea = `
+                        <div class="bg-slate-200 text-slate-500 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300">
+                            Sold Out
+                        </div>
+                    `;
+                } else {
+                    actionArea = item.mini
+                        ? `<div class="flex gap-2">
+                             <button onclick="addToCart('${item.name}', '${item.price}')"
+                               class="bg-orange-50 hover:bg-orange-100 text-orange-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-orange-200">
+                               <i class="fa-solid fa-plus text-xs"></i> Burger
+                             </button>
+                             <button onclick="addToCart('${item.name} (Mini)', '${item.mini}')"
+                               class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-2 rounded-full flex items-center gap-1 transition-all active:scale-90 text-xs font-bold border border-blue-200">
+                               <i class="fa-solid fa-plus text-xs"></i> Mini
+                             </button>
+                           </div>`
+                        : `<button onclick="addToCart('${item.name}', '${item.price}')"
+                             class="bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 w-11 h-11 rounded-full flex items-center justify-center transition-all active:scale-90 shadow-sm border border-slate-200 hover:border-blue-200">
+                             <i class="fa-solid fa-plus text-sm"></i>
+                           </button>`;
+                }
+
+                el.innerHTML = `
+                    <div class="mb-4">
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="text-xl font-bold text-blue-950 serif leading-tight tracking-tight">${item.name}</h3>
+                            ${item.veg ? '<span class="text-[10px] bg-green-50 text-green-600 px-2.5 py-1 rounded-full font-bold border border-green-100 tracking-wide">VEG</span>' : ''}
+                        </div>
+                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-3 font-medium">${item.desc || ''}</p>
+                    </div>
+                    <div class="flex justify-between items-end mt-auto pt-4">
+                        ${priceDisplay}
+                        ${actionArea}
+                    </div>
+                `;
+                menuGrid.appendChild(el);
+                setTimeout(() => el.classList.add('fade-enter-active'), index * 50);
+            });
+        }
+
+        window.addToCart = function (name, priceStr) {
+            let price = parseInt(priceStr.replace(/[^0-9]/g, ''));
+            if (isNaN(price)) price = 0;
+            cart.push({ name, price, priceStr });
+            updateCartUI();
+        };
+
+        window.removeFromCart = function (index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        };
+
+        window.applyPromoCode = async function () {
+            const code = document.getElementById('promo-code').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-msg');
+
+            if (code === 'FISH5') {
+                discountPercent = 0.05;
+                msg.textContent = "5% Discount Applied!";
+                msg.classList.remove('hidden', 'text-red-500');
+                msg.classList.add('text-green-600');
+            } else {
+                discountPercent = 0;
+                msg.textContent = "Invalid Code";
+                msg.classList.remove('hidden', 'text-green-600');
+                msg.classList.add('text-red-500');
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cart.length;
+            cartCountBadge.innerText = count;
+            headerCartCount.innerText = count;
+            mobileHeaderBadge.innerText = count;
+
+            if (count > 0) {
+                cartCountBadge.classList.remove('hidden');
+                mobileHeaderBadge.classList.remove('hidden');
+                emptyCartMsg.classList.add('hidden');
+                cartItemsContainer.classList.remove('hidden');
+                cartFooter.classList.remove('hidden');
+
+
+            } else {
+                cartCountBadge.classList.add('hidden');
+                mobileHeaderBadge.classList.add('hidden');
+                emptyCartMsg.classList.remove('hidden');
+                cartItemsContainer.classList.add('hidden');
+                cartFooter.classList.add('hidden');
+
+
+            }
+
+            // Render Items
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += item.price;
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-100 shadow-[0_4px_15px_rgb(0,0,0,0.03)] hover:shadow-[0_4px_15px_rgb(0,0,0,0.06)] transition-all duration-200';
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <div class="font-bold text-base text-blue-950 serif mb-0.5">${item.name}</div>
+                        <div class="text-sm text-orange-600 font-semibold">${item.priceStr}</div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-slate-400 hover:text-red-500 hover:bg-red-50 w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-90">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+
+            // Calculate Totals
+            const discountAmount = subtotal * discountPercent;
+            const finalTotal = subtotal - discountAmount;
+
+            const totalText = Math.round(finalTotal) + " DH";
+            cartTotalDisplay.innerText = totalText;
+
+
+            const discountDisplay = document.getElementById('discount-display');
+            if (discountPercent > 0) {
+                discountDisplay.classList.remove('hidden');
+                document.getElementById('discount-amount').innerText = `-${Math.round(discountAmount)} DH`;
+            } else {
+                discountDisplay.classList.add('hidden');
+            }
+        }
+
+        // --- MODAL FUNCTIONS ---
+        const modal = document.getElementById('checkout-modal');
+        const successModal = document.getElementById('success-modal');
+        const successDetails = document.getElementById('success-details');
+        const nameInput = document.getElementById('customer-name-input');
+        const phoneInput = document.getElementById('customer-phone-input');
+        const addressInput = document.getElementById('customer-address-input');
+        const locationInput = document.getElementById('customer-location-input');
+
+        window.checkout = function () {
+            if (cart.length === 0) return;
+            modal.classList.remove('hidden');
+            nameInput.focus();
+        }
+
+        window.closeModal = function () {
+            modal.classList.add('hidden');
+        }
+
+        window.closeSuccessModal = function () {
+            successModal.classList.add('hidden');
+        }
+
+        window.confirmOrder = async function () {
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const address = addressInput.value.trim();
+            const location = locationInput.value;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+
+            // Handle Stripe Payment
+            if (paymentMethod === 'card') {
+                const submitBtn = document.querySelector('button[onclick="confirmOrder()"]');
+                const originalText = submitBtn.innerHTML;
+
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>Processing...';
+
+                    // For demo purposes, we simulate the Stripe flow
+                    // In a real app, you'd use: const {token, error} = await stripe.createToken(card);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    // We proceed if validation passed (mocked)
+                } catch (e) {
+                    alert("Payment processing failed. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                    return;
+                }
+            }
+
+            if (name && phone && address) {
+                try {
+                    // Calculate totals
+                    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+                    const discountAmount = subtotal * discountPercent;
+                    const total = subtotal - discountAmount;
+
+                    // Prepare order data
+                    const orderData = {
+                        customer: {
+                            name: name,
+                            phone: phone,
+                            address: address
+                        },
+                        items: cart.map(item => ({
+                            name: item.name,
+                            price: item.price,
+                            priceStr: item.priceStr
+                        })),
+                        subtotal: subtotal,
+                        discount: discountAmount,
+                        total: total,
+                        location: location,
+                        paymentMethod: paymentMethod,
+                        promoCode: appliedCode || null,
+                        status: 'pending',
+                        timestamp: serverTimestamp(),
+                        createdAt: serverTimestamp(),
+                        orderNumber: Math.floor(Math.random() * 10000)
+                    };
+
+                    // Submit to Firebase
+                    await addDoc(collection(db, 'orders'), orderData);
+
+                    // Show success modal with details
+                    successDetails.innerHTML = `
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-user text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Name:</span> ${name}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-phone text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Phone:</span> ${phone}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-map-pin text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Address:</span> ${address}
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2 text-white/90">
+                            <i class="fa-solid fa-credit-card text-white/70 mt-0.5"></i>
+                            <div>
+                                <span class="font-semibold text-white">Payment:</span> ${paymentMethod === 'card' ? 'Card Payment' : 'Cash on Delivery (A domicile)'}
+                            </div>
+                        </div>
+                    `;
+
+                    // Update order number display
+                    document.getElementById('success-order-number').textContent = '#' + String(orderData.orderNumber).padStart(4, '0');
+
+                    // Update track order button link
+                    document.getElementById('track-order-btn').href = 'track.html?order=' + orderData.orderNumber;
+
+                    closeModal();
+                    successModal.classList.remove('hidden');
+
+                    // Reset cart and inputs
+                    cart = [];
+                    discountPercent = 0;
+                    appliedCode = '';
+                    updateCartUI();
+                    nameInput.value = '';
+                    phoneInput.value = '';
+                    addressInput.value = '';
+                } catch (error) {
+                    console.error('Error submitting order:', error);
+                    alert('Failed to submit order. Please try again.');
+                }
+            } else {
+                alert("Please fill in all fields (Name, Phone, and Address).");
+            }
+        }
+
+        // Initialize
+        const storedLoc = localStorage.getItem('selectedLocation');
+        if (storedLoc) {
+            locationInput.value = storedLoc;
+        }
+
+        // --- Stripe Integration ---
+        // Initialize Stripe with a test key
+        const stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx'); // Standard Stripe Demo Key
+        const elements = stripe.elements();
+
+        // Style for Stripe Element
+        const style = {
+            base: {
+                color: '#1e293b',
+                fontFamily: '"DM Sans", sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#94a3b8'
+                }
+            },
+            invalid: {
+                color: '#ef4444',
+                iconColor: '#ef4444'
+            }
+        };
+
+        const card = elements.create('card', {
+            style: style,
+            hidePostalCode: true
+        });
+        card.mount('#card-element');
+
+        card.on('change', function (event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Handle Payment Method Toggle for Stripe Fields
+        const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+        const stripeSection = document.getElementById('stripe-card-section');
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'card') {
+                    stripeSection.classList.remove('hidden');
+                } else {
+                    stripeSection.classList.add('hidden');
+                }
+            });
+        });
+
+        filterMenu('burgers');
+    </script>
+</body>
+
+</html>
