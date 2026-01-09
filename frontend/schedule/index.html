@@ -11,6 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/phone.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         /* Force Input Visibility for Menu Editing */
@@ -77,9 +78,6 @@
             <div class="user-profile">
                 <div class="avatar" id="userAvatar">M</div>
             </div>
-            <button class="logout-btn" onclick="logout()" title="Sign Out">
-                <i data-lucide="log-out"></i>
-            </button>
         </div>
     </header>
 
@@ -123,6 +121,10 @@
                         <span class="stat-label">In Progress</span>
                     </div>
                 </div>
+                <button class="logout-btn" onclick="logout()" title="Sign Out">
+                    <i data-lucide="log-out"></i>
+                    <span>Sign Out</span>
+                </button>
             </div>
         </aside>
 

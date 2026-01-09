@@ -1,0 +1,473 @@
+/* COMPLETE MOBILE PHONE RESPONSIVE DESIGN
+   Fits schedule dashboard properly on phones
+*/
+
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden !important;
+    }
+    /* Sidebar - hidden by default on mobile */
+    .sidebar {
+        transform: translateX(-100%) !important;
+        position: fixed !important;
+        z-index: 1000 !important;
+        width: 260px !important;
+        top: 56px !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    .sidebar.open {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-overlay {
+        display: none !important;
+        position: fixed !important;
+        top: 56px !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+        z-index: 999 !important;
+    }
+
+    .sidebar-overlay.show {
+        display: block !important;
+    }
+
+    /* Let main content take full width and prevent overflow */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 10px !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Header smaller and denser */
+    .header {
+        height: var(--header-height-mobile) !important;
+        padding: 0 12px !important;
+    }
+
+    :root{ --header-height: var(--header-height-mobile); }
+
+    /* Make interactive controls larger for touch */
+    .btn, .notification-btn, .mobile-menu-btn {
+        min-height: 44px;
+        padding: 10px 14px;
+        touch-action: manipulation;
+    }
+
+    /* Hide logout button from header on mobile */
+    .logout-btn {
+        display: none !important;
+    }
+
+    /* Show logout button in sidebar footer */
+    .sidebar-footer {
+        padding: 12px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-top: auto !important;
+    }
+
+    .quick-stats {
+        display: flex !important;
+        gap: 10px !important;
+    }
+
+    .stat-item {
+        flex: 1 !important;
+        padding: 12px !important;
+        background: rgba(99, 102, 241, 0.1) !important;
+        border: 1px solid rgba(99, 102, 241, 0.2) !important;
+        border-radius: 8px !important;
+        text-align: center !important;
+    }
+
+    .stat-value {
+        display: block !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        color: #6366f1 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .stat-label {
+        font-size: 0.6rem !important;
+        color: #6a6a7a !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Logout button in sidebar */
+    .sidebar .logout-btn {
+        display: flex !important;
+        width: 100% !important;
+        padding: 10px 12px !important;
+        background: rgba(239, 68, 68, 0.15) !important;
+        border: 1.5px solid #ef4444 !important;
+        color: #ef4444 !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+        font-size: 0.85rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+
+    .sidebar .logout-btn:hover {
+        background: rgba(239, 68, 68, 0.25) !important;
+    }
+
+    .sidebar .logout-btn svg,
+    .sidebar .logout-btn i {
+        width: 16px !important;
+        height: 16px !important;
+        color: #ef4444 !important;
+    }
+
+    /* Stack view header and ensure actions fit */
+    .view-header { flex-direction: column; gap: 12px; align-items: stretch; }
+
+    /* Menu grid: single column, no overflow */
+    .menu-grid { 
+        grid-template-columns: 1fr !important; 
+        gap: 10px !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Menu cards: fit screen width */
+    .menu-card {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important;
+    }
+
+    .menu-card-image {
+        height: 100px !important;
+        width: 100% !important;
+        object-fit: cover !important;
+    }
+
+    .menu-card-body {
+        padding: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .menu-card-title {
+        font-size: 1rem !important;
+        margin-bottom: 4px !important;
+        line-height: 1.2 !important;
+    }
+
+    .menu-card-price {
+        font-size: 1rem !important;
+        margin-bottom: 6px !important;
+    }
+
+    .menu-card-category {
+        font-size: 0.6rem !important;
+        padding: 3px 8px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Menu card footer - buttons inside, no overflow */
+    .menu-card-footer {
+        padding: 10px 12px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        gap: 8px !important;
+    }
+
+    /* Menu card action buttons - small, inside card */
+    .menu-card-actions {
+        display: flex !important;
+        gap: 4px !important;
+        align-items: center !important;
+    }
+
+    .edit-btn,
+    .save-btn,
+    .cancel-btn {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        padding: 0 !important;
+        border-radius: 6px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
+        border: 1.5px solid currentColor !important;
+        background: transparent !important;
+        transition: all 0.2s !important;
+    }
+
+    .edit-btn {
+        color: #818cf8 !important;
+    }
+
+    .save-btn {
+        color: #10b981 !important;
+        display: none;
+    }
+
+    .cancel-btn {
+        color: #ef4444 !important;
+        display: none;
+    }
+
+    .menu-card.editing .edit-btn {
+        display: none !important;
+    }
+
+    .menu-card.editing .save-btn,
+    .menu-card.editing .cancel-btn {
+        display: flex !important;
+    }
+
+    .edit-btn i,
+    .save-btn i,
+    .cancel-btn i,
+    .edit-btn svg,
+    .save-btn svg,
+    .cancel-btn svg {
+        width: 18px !important;
+        height: 18px !important;
+        color: inherit !important;
+        stroke: currentColor !important;
+        fill: currentColor !important;
+        display: block !important;
+    }
+
+    .actions {
+        display: flex !important;
+        gap: 8px !important;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .btn-icon {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px;
+        min-height: 44px;
+        flex-shrink: 0;
+        touch-action: manipulation;
+        font-size: 1.1rem !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: var(--bg-tertiary) !important;
+        border: 1px solid var(--accent-primary) !important;
+        color: var(--text-primary) !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .btn-icon svg {
+        width: 24px !important;
+        height: 24px !important;
+        color: var(--text-primary) !important;
+        stroke: var(--text-primary) !important;
+        visibility: visible !important;
+    }
+
+    /* Menu filters: horizontal scroll on mobile */
+    .menu-filters {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+        padding: 8px 0 12px 0 !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        scroll-snap-type: x mandatory !important;
+    }
+
+    .menu-filters::-webkit-scrollbar {
+        height: 6px !important;
+    }
+
+    .menu-filters::-webkit-scrollbar-track {
+        background: transparent !important;
+    }
+
+    .menu-filters::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 3px !important;
+    }
+
+    .menu-filters::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .menu-filter {
+        flex-shrink: 0 !important;
+        padding: 10px 16px !important;
+        white-space: nowrap !important;
+        font-size: 0.9rem !important;
+        min-height: 38px !important;
+        touch-action: manipulation !important;
+        border-radius: 6px !important;
+        scroll-snap-align: start !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .menu-filter:active {
+        transform: scale(0.95) !important;
+    }
+
+    /* Search box full width */
+    .search-box {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .search-box input {
+        font-size: 1rem !important;
+        padding: 12px 16px 12px 40px !important;
+        min-height: 44px;
+    }
+
+    /* Menu controls layout */
+    .menu-controls {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Increase spacing and readable text on cards */
+    .card, .stat-card, .task-item { padding: 12px !important; }
+
+    /* Calendar: single column list-like on narrow screens */
+    .calendar-container { padding: 0; }
+    .calendar-grid {
+        display: block;
+        width: 100%;
+    }
+    .calendar-day {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .day-number { font-size: 0.95rem; font-weight: 600; }
+    .day-task { font-size: 0.9rem; padding: 6px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); }
+
+    /* Forms and inputs full width */
+    input, select, textarea { width: 100% !important; font-size: 1rem; }
+
+    /* Messages and chat: make send button full width */
+    .message-input-container { flex-direction: column; gap: 8px; }
+    #sendMessageBtn { width: 100% !important; }
+
+    /* Improve readability for small phones */
+    .logo-text { font-size: 1.1rem !important; }
+
+    /* Sidebar footer and logout styling */
+    .sidebar-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding-top: 12px !important;
+        margin-top: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .quick-stats {
+        display: flex !important;
+        gap: 12px !important;
+    }
+
+    .stat-item {
+        flex: 1 !important;
+        padding: 12px !important;
+        background: rgba(99, 102, 241, 0.1) !important;
+        border: 1px solid rgba(99, 102, 241, 0.2) !important;
+        border-radius: 8px !important;
+        text-align: center !important;
+    }
+
+    .stat-value {
+        display: block !important;
+        font-size: 1.3rem !important;
+        font-weight: 700 !important;
+        color: #6366f1 !important;
+        margin-bottom: 4px !important;
+    }
+
+    .stat-label {
+        font-size: 0.65rem !important;
+        color: #6a6a7a !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Logout button styling - appears in sidebar footer */
+    .logout-btn {
+        width: 100% !important;
+        padding: 20px 16px !important;
+        background: rgba(239, 68, 68, 0.15) !important;
+        border: 2px solid #ef4444 !important;
+        color: #ef4444 !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 1.2rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        min-height: 56px !important;
+    }
+
+    .logout-btn:hover {
+        background: rgba(239, 68, 68, 0.25) !important;
+        transform: scale(1.02) !important;
+    }
+
+    .logout-btn svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
+
+/* Extra small phones: tighten layout */
+@media (max-width: 420px) {
+    .card, .stat-card, .task-item { padding: 10px !important; }
+    .header { height: 56px !important; }
+    :root{ --header-height: 56px; }
+}

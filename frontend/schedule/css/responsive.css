@@ -98,6 +98,43 @@
         height: 22px;
         color: var(--text-primary);
     }
+
+    /* Sticky Horizontal Menu Categories (Ensure applies on tablets/large phones too) */
+    .menu-controls {
+        position: sticky !important;
+        top: var(--header-height) !important;
+        background: var(--bg-card) !important;
+        z-index: 100 !important;
+        padding-top: var(--spacing-sm) !important;
+        padding-bottom: var(--spacing-sm) !important;
+        margin-bottom: var(--spacing-lg) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--spacing-sm) !important;
+    }
+
+    .menu-filters {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -ms-overflow-style: none !important;
+        scrollbar-width: none !important;
+        gap: 8px !important;
+        padding: 4px 4px !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+    }
+
+    .menu-filters::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .menu-filter {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+    }
 }
 
 /* Phone */
@@ -211,9 +248,15 @@
         top: var(--header-height) !important;
         background: var(--bg-card) !important;
         z-index: 100 !important;
-        padding-top: var(--spacing-md) !important;
+        padding-top: var(--spacing-sm) !important;
+        padding-bottom: var(--spacing-sm) !important;
         margin-bottom: var(--spacing-lg) !important;
         border-bottom: 1px solid var(--border-color) !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: var(--spacing-sm) !important;
+        /* spacing between search and filters */
     }
 
     .menu-filters {
@@ -223,8 +266,10 @@
         -ms-overflow-style: none !important;
         scrollbar-width: none !important;
         gap: 8px !important;
-        padding-bottom: 8px !important;
+        padding: 4px 4px !important;
+        /* Add slight horizontal padding to avoid edge clipping */
         -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
     }
 
     .menu-filters::-webkit-scrollbar {
