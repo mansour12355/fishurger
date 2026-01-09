@@ -319,7 +319,7 @@
                                                 class="w-full rounded-xl border border-slate-200 py-3.5 pl-11 pr-4 text-slate-800 focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 sm:text-sm bg-slate-100 transition-all font-semibold appearance-none cursor-not-allowed opacity-75">
                                                 <option value="rooftop">Rooftop</option>
                                                 <option value="medina">Medina</option>
-                                                <option value="casa">Casa</option>
+                                                <option value="casablanca">Casa</option>
                                             </select>
                                             <div
                                                 class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -464,7 +464,9 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getFirestore, collection, addDoc, serverTimestamp, doc, runTransaction, getDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        const firebaseConfig = {
+        // --- CONFIGURATION ---
+        // 1. Menu Database (schedulesfishburger) - Matches Schedule App
+        const menuConfig = {
             apiKey: "AIzaSyDH78fxDaNoqGAzyuPvuGMAoI09xlm8G_8",
             authDomain: "schedulesfishburger.firebaseapp.com",
             projectId: "schedulesfishburger",
@@ -474,8 +476,27 @@
             measurementId: "G-02T4XQD19G"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // 2. Orders Database (fishurger-system) - Matches Kitchen App & Tracking
+        const orderConfig = {
+            apiKey: "AIzaSyAbkJpVWRXfOuG-VDp0dC0oGkPKo9VCZD0",
+            authDomain: "fishburger-system.firebaseapp.com",
+            projectId: "fishburger-system",
+            storageBucket: "fishburger-system.firebasestorage.app",
+            messagingSenderId: "1011829893886",
+            appId: "1:1011829893886:web:626820e2eb475b2b45d3af",
+            measurementId: "G-LHF8XPTL3G"
+        };
+
+        // Initialize Both Apps
+        const menuApp = initializeApp(menuConfig, "menuApp"); // Secondary app needs a name
+        const orderApp = initializeApp(orderConfig, "orderApp");
+
+        const menuDb = getFirestore(menuApp);
+        const orderDb = getFirestore(orderApp);
+
+        // For backwards compatibility with existing code (if any uses 'db'), map it to the primary function of this page
+        // But we should update calls to valid instances.
+        const db = menuDb; // Default to menu for fetches, but we will be specific.
 
         // --- DATA ---
         // --- DATA ---
@@ -497,9 +518,16 @@
                     console.warn('No location selected, defaulting to medina for display');
                     selectedLocation = 'medina';
                 }
+
+                // Compatibility fix: convert 'casa' to 'casablanca'
+                if (selectedLocation === 'casa') {
+                    selectedLocation = 'casablanca';
+                    localStorage.setItem('selectedLocation', 'casablanca');
+                }
+
                 selectedLocation = selectedLocation.toLowerCase();
 
-                const menuRef = collection(db, 'menu');
+                const menuRef = collection(menuDb, 'menu');
                 const snapshot = await getDocs(menuRef);
 
                 // Reset arrays
@@ -606,7 +634,7 @@
 
                 // Card CSS: Add grayscale/opacity if sold out
                 const baseClasses = 'bg-slate-50 rounded-[2rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col justify-between fade-enter hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 relative';
-                el.className = isSoldOut ? baseClasses + ' opacity-75 grayscale' : baseClasses;
+                el.className = isSoldOut ? baseClasses + ' opacity-75' : baseClasses;
 
                 // Build price display with mini option
                 const priceDisplay = item.mini
@@ -627,7 +655,7 @@
 
                 if (isSoldOut) {
                     actionArea = `
-                        <div class="bg-slate-200 text-slate-500 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300">
+                        <div class="bg-red-100 text-red-600 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-red-200">
                             Sold Out
                         </div>
                     `;
@@ -841,8 +869,8 @@
                         orderNumber: Math.floor(Math.random() * 10000)
                     };
 
-                    // Submit to Firebase
-                    await addDoc(collection(db, 'orders'), orderData);
+                    // Submit to Firebase (ORDERS DB)
+                    await addDoc(collection(orderDb, 'orders'), orderData);
 
                     // Show success modal with details
                     successDetails.innerHTML = `

@@ -27,7 +27,12 @@
 
             // If location is provided in URL, save it
             if (locationParam) {
-                localStorage.setItem('selectedLocation', locationParam);
+                // Compatibility fix: convert 'casa' to 'casablanca'
+                if (locationParam === 'casa') {
+                    localStorage.setItem('selectedLocation', 'casablanca');
+                } else {
+                    localStorage.setItem('selectedLocation', locationParam);
+                }
             }
             // If no location in URL AND no location in localStorage, redirect to index.html
             else if (!storedLocation) {
